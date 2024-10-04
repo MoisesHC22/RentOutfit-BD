@@ -2496,3 +2496,36 @@ INSERT INTO Municipios (nombreMunicipio, estadoID, ultimaModificacionMunicipio) 
 ('Zacatecas', 31, GETDATE()),
 ('Trancoso', 31, GETDATE()),
 ('Santa María de la Paz', 31, GETDATE());
+
+
+
+/******
+Insertar datos a la tabla de generos
+Script Date: 03/10/2024 01:52:00 p. m. 
+Autor: Moisés Jael Hernández Calva
+Contacto: moyhc2204gamer@outlook.com
+******/
+
+INSERT INTO Generos (nombreGenero, ultimaModificacionGenero)
+VALUES 
+('Masculino', GETDATE()),
+('Femenino', GETDATE()),
+('No binario', GETDATE()),
+('Otro', GETDATE()); 
+
+
+
+/******
+Insertar datos a la tabla de roles
+Script Date: 03/10/2024 01:55:00 p. m. 
+Autor: Moisés Jael Hernández Calva
+Contacto: moyhc2204gamer@outlook.com
+******/
+
+INSERT INTO DetalleRol(nombreRol, ultimaModificacionDtRol)
+VALUES 
+('Cliente', GETDATE()),
+('Vendedor', GETDATE()),
+('Adminstrador', GETDATE());
+
+

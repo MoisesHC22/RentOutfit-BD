@@ -16,7 +16,7 @@ Para ejecutar la base de datos necesitas:
 |---------------------------------|-----------------|
 | usuarioID                       | int (Identity)  |
 | email                           | varchar(50)     |
-| contraseña                      | varchar(15)     |
+| contrasena                      | varchar(255)     |
 | rolID                           | date            |
 | token                           | varchar(50)     |
 | tokenValidacion                 | varchar(50)     |
@@ -37,7 +37,6 @@ Para ejecutar la base de datos necesitas:
 | usuarioID                       | int             |
 | ultimaModificacionRol           | datetime        |
 
-
 ### 4. Clientes
 | Columna                         | Tipo de dato    |
 |---------------------------------|-----------------|
@@ -47,7 +46,7 @@ Para ejecutar la base de datos necesitas:
 | apellidoMaterno                 | varchar(50)     |
 | linkImagenPerfil                | varchar(250)    |
 | usuarioID                       | int             |
-| teléfono                        | varchar(10)     |
+| telefono                        | varchar(10)     |
 | direccionID                     | int             |
 | generoID                        | int             |
 |ultimaModificacionCliente        | datetime        |
@@ -92,10 +91,9 @@ Para ejecutar la base de datos necesitas:
 | Columna                         | Tipo de dato    |
 |---------------------------------|-----------------|
 | municipioID                     | int (Identity)  |
-| nombreMunicipio                 | varchar(50)     |
+| nombreMunicipio                 | varchar(150)     |
 | estadoID                        | int             |
 | ultimaModificacionMunicipio     | datetime        |
-
 
 ### 10. Calificaciones
 | Columna                         | Tipo de dato    |
@@ -131,7 +129,7 @@ Para ejecutar la base de datos necesitas:
 | incidenciaID                    | int (Identity)  |
 | fechaIncidencia                 | datetime        |
 | descripcion                     | text            |
-| IncidenciaEstatus               | bit             |
+| incidenciaEstatus               | bit             |
 | ultimaModificacionIncidencia    | datetime        |
 
 ### 14. Vestimentas
@@ -148,7 +146,6 @@ Para ejecutar la base de datos necesitas:
 | establecimientoID               | int             |
 | ultimaModificacionUsuario       | datetime        |
 | vestimentaEstatus               | bit             |
-
 
 ### 15. Clasificaciones
 | Columna                         | Tipo de dato    |
@@ -174,7 +171,6 @@ Para ejecutar la base de datos necesitas:
 | fechaInicio                     | date            |
 | ultimaModificacionChat          | datetime        |
 | mensajeID                       | int             |
-
 
 ### 18. Mensajes
 | Columna                         | Tipo de dato    |

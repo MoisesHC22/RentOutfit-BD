@@ -36,6 +36,7 @@ BEGIN
 	  BEGIN TRANSACTION;
 
 	  SELECT
+	    c.clienteID,
 		C.nombreCliente,
 		C.apellidoMaterno,
 		C.apellidoPaterno,

@@ -189,7 +189,7 @@ SELECT * FROM [dbo].[Clientes]
 SELECT * FROM [dbo].[Roles]
 SELECT * FROM [dbo].[Direcciones]
 SELECT * FROM [dbo].[Usuarios]
-
+SELECT * FROM [dbo].[DetalleRol]
 
 
 /******

@@ -65,8 +65,8 @@ BEGIN
 
 	  DECLARE @usuarioID INT;
 	  DECLARE @contrasenaEncryptada VARBINARY(64) = HASHBYTES('SHA2_256', @contrasena);
-     	  INSERT INTO Usuarios (email, contrasena, rolID, token, tokenValidacion, ultimaModificacionUsuario)
-	      VALUES (@email, @contrasenaEncryptada, 1, @token, @tokenValidacion, GETDATE());
+     	  INSERT INTO Usuarios (email, contrasena, token, tokenValidacion, ultimaModificacionUsuario)
+	      VALUES (@email, @contrasenaEncryptada, @token, @tokenValidacion, GETDATE());
 	  SET @usuarioID = SCOPE_IDENTITY();
 
 	  -- Insertar el rol
@@ -90,7 +90,7 @@ BEGIN
 	  COMMIT TRANSACTION;
 
 	  SET @tipoError = 0;
-	  SET @mensaje = 'Operación exitosa';
+	  SET @mensaje = 'Se insertó el cliente de forma correcta.';
 	  SELECT @tipoError AS tipoError, @mensaje AS mensaje;
 
    END TRY
@@ -166,16 +166,16 @@ Contacto: moyhc2204gamer@outlook.com
 
    EXEC [dbo].[sp_registrar_cliente]
        @email = 'cliente@ejemplo.com',
-       @contrasena = 'contrasena123',
-       @token = 'token123',
-       @tokenValidacion = 'validacion123',
-       @nombreCliente = 'Juan',
-       @apellidoPaterno = 'Pérez',
-       @apellidoMaterno = 'González',
+       @contrasena = 'contrasena456',
+       @token = 'token456',
+       @tokenValidacion = 'validacion456',
+       @nombreCliente = 'Carlos',
+       @apellidoPaterno = 'Gomez',
+       @apellidoMaterno = 'Peña',
        @linkImagenPerfil = 'http://imagen.com/perfil.jpg',
-       @telefono = '5551234567',
+       @telefono = '5551234599',
        @generoID = 1,
-       @codigoPostal = '12345',
+       @codigoPostal = '55657',
        @colonia = 'Centro',
        @calle = 'Primera',
        @noInt = 101,

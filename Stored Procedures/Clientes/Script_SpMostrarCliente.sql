@@ -5,15 +5,15 @@ GO
 
 /******
 Creación de Stored procedure para mostrar uno o más cliente.   
-Script Date: 04/10/2024 3:20:57 a. m. 
+Script Date: 07/10/2024 02:22:55 p. m. 
 Autor: Moisés Jael Hernández Calva       
 Contacto: moyhc2204gamer@outlook.com
 ******/
 
 CREATE OR ALTER PROC [dbo].[sp_mostrar_cliente]
 (
-@detalleRolID INT = NULL,
-@usuarioID INT = NULL
+@usuarioID INT = NULL,
+@pagina INT = 1
 )
 AS
 BEGIN
@@ -21,10 +21,13 @@ BEGIN
 
   DECLARE @tipoError INT = 0;
   DECLARE @mensaje NVARCHAR(255) = '';
+  DECLARE @registrosPorPagina INT  = 25;
+  DECLARE @offset INT;
+  DECLARE @detalleRolID INT;
 
   BEGIN TRY
 
-	 IF @detalleRolID IS NULL OR @usuarioID IS NULL
+	 IF @usuarioID IS NULL
 	  BEGIN
 	     SET @tipoError = 1;
 		 SET @mensaje = 'Aún no tienes Acceso.'
@@ -33,39 +36,69 @@ BEGIN
          RETURN;
 	  END
 
+	  SET @offset = (@pagina - 1) * @registrosPorPagina;
+
 	  BEGIN TRANSACTION;
 
-	  SELECT
-	    c.clienteID,
-		C.nombreCliente,
-		C.apellidoMaterno,
-		C.apellidoPaterno,
-		C.linkImagenPerfil,
-		C.telefono,
-		G.nombreGenero AS genero,
-		D.calle,
-		D.noExt,
-		D.noInt,
-		D.colonia,
-		D.codigoPostal,
-		D.municipio,
-		E.nombreEstado AS estado,
-		U.email,
-		U.contrasena
-	  FROM Clientes C
-        INNER JOIN Usuarios U ON C.usuarioID = U.usuarioID
-	    INNER JOIN Direcciones D ON C.direccionID = D.direccionID
-        INNER JOIN Estados E ON D.estadoID = E.estadoID
-        INNER JOIN Generos G ON C.generoID = G.generoID
-	    INNER JOIN Roles R ON U.rolID = R.rolID
-	    INNER JOIN DetalleRol DR ON R.detalleRolID = DR.detalleRolID
-	  WHERE (C.usuarioID = @usuarioID OR @detalleRolID = 3 )
+	  IF EXISTS (SELECT 1 FROM Usuarios WHERE usuarioID = @usuarioID)
+	    BEGIN
 
-	 COMMIT TRANSACTION;
+		   -- Obtener el rol
+	     
+		  SELECT @detalleRolID = DT.detalleRolID
+	      FROM Usuarios U
+	        INNER JOIN Roles R ON U.usuarioID = R.usuarioID
+	        INNER JOIN DetalleRol DT ON R.detalleRolID = DT.detalleRolID
+	      WHERE U.usuarioID = @usuarioID
 
-	 SET @tipoError = 0;
-	 SET @mensaje = 'Operación exitosa.';
-	 SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	      SELECT
+	       C.clienteID,
+		   C.nombreCliente,
+		   C.apellidoMaterno,
+		   C.apellidoPaterno,
+		   C.linkImagenPerfil,
+		   C.telefono,
+		   G.nombreGenero AS genero,
+		   D.calle,
+		   D.noExt,
+		   D.noInt,
+		   D.colonia,
+		   D.codigoPostal,
+		   D.municipio,
+		   E.nombreEstado AS estado,
+		   U.email,
+		   U.contrasena
+	      FROM Usuarios U
+            INNER JOIN Clientes C ON U.usuarioID = C.usuarioID
+		    INNER JOIN Roles R ON U.usuarioID = R.usuarioID
+		    INNER JOIN Direcciones D ON C.direccionID = D.direccionID
+		    INNER JOIN Estados E ON D.estadoID = E.estadoID
+	   	    INNER JOIN Generos G ON C.generoID = G.generoID
+		    INNER JOIN DetalleRol DT ON R.detalleRolID = DT.detalleRolID
+	      WHERE (C.usuarioID = @usuarioID OR @detalleRolID = 3)
+
+          ORDER BY C.clienteID
+	      OFFSET CASE WHEN @detalleRolID = 3 THEN @offset ELSE 0 END ROWS
+	      FETCH NEXT CASE WHEN @detalleRolID = 3  THEN @registrosPorPagina ELSE 1000 END ROWS ONLY;
+
+     	  COMMIT TRANSACTION;
+
+	      SET @tipoError = 0;
+	      SET @mensaje = 'Consulta de cliente exitosa.';
+	      SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	    END
+	  ELSE
+	   BEGIN
+	   SET @tipoError = 2;
+	         SET @mensaje = 'Revisa tus datos.';
+	   
+	         ROLLBACK TRANSACTION;
+
+        	 SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+    	   RETURN;
+	   END
+
+	  
 
   END TRY
   BEGIN CATCH
@@ -73,7 +106,7 @@ BEGIN
       IF @@TRANCOUNT > 0
 	     ROLLBACK TRANSACTION;
 
-		 SET @tipoError = 2;
+		 SET @tipoError = 3;
 		 SET @mensaje = ERROR_MESSAGE();
          SELECT @tipoError as tipoError, @mensaje as mensaje;
 
@@ -84,7 +117,7 @@ END
 
 /******
 Testeo para mostrar uno o más clientes con el Stored procedure.   
-Script Date: 04/10/2024 3:25:11 a. m. 
+Script Date: 07/10/2024 02:30:59 p. m. 
 Autor: Moisés Jael Hernández Calva       
 Contacto: moyhc2204gamer@outlook.com
 ******/
@@ -93,17 +126,29 @@ Contacto: moyhc2204gamer@outlook.com
 
    -- Ejemplo 1
    EXEC [dbo].[sp_mostrar_cliente]
-   @detalleRolID = 2,
-   @usuarioID = 3;
+   @usuarioID = 1;
 
    -- Ejemplo 2
    EXEC [dbo].[sp_mostrar_cliente]
-   @detalleRolID = 1,
    @usuarioID = 2;
 
 
 
 -- Si el usuario tiene el rol de administrador, va a poder ver todas las cuentas.
   EXEC [dbo].[sp_mostrar_cliente]
-  @detalleRolID = 3,
-  @usuarioID = 1;
+  @usuarioID = 3;
+
+
+-- Error de datos nulos
+   EXEC [dbo].[sp_mostrar_cliente]
+
+-- Error de datos inexistentes
+  EXEC [dbo].[sp_mostrar_cliente]
+  @usuarioID = 99;
+
+
+-- Comprobar los registros en la base de datos
+  SELECT*FROM Usuarios;
+  SELECT*FROM Clientes;
+  SELECT*FROM Roles;
+  SELECT*FROM Direcciones;

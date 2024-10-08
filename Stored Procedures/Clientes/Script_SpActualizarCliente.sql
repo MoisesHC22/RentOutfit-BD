@@ -4,7 +4,7 @@ GO
 
 /******
 Creación de Stored procedure para actualizar un cliente.   
-Script Date: 04/10/2024 02:30:01 p. m.																		
+Script Date: 05/10/2024 07:21:56 p. m. 																	
 Autor: Moisés Jael Hernández Calva       
 Contacto: moyhc2204gamer@outlook.com
 ******/
@@ -37,7 +37,7 @@ CREATE OR ALTER PROC [dbo].[sp_actualizar_cliente]
 @noInt INT,
 @noExt INT,
 @estadoID INT,
-@municipio VARCHAR(50)
+@municipio VARCHAR(150)
 )
 AS
 BEGIN
@@ -52,7 +52,7 @@ BEGIN
 	-- Validación del campo
 	IF @clienteID IS NULL
 	  BEGIN
-	    SET @tipoError= 1;
+	    SET @tipoError = 1;
 		SET @mensaje = 'Debe proporcionar al menos un ID para actualizar.';
 
 		ROLLBACK TRANSACTION;
@@ -87,7 +87,7 @@ BEGIN
 	   SET @contrasenaNuevaEncryptada = HASHBYTES('SHA2_256', @contrasena);
 	   
 	IF EXISTS (SELECT 1 FROM Usuarios U
-	   INNER JOIN Clientes C ON U.usuarioID = C.usuarioID
+	   INNER JOIN Clientes C WITH(NOLOCK) ON U.usuarioID = C.usuarioID
 		WHERE C.clienteID = @clienteID
 		AND (email <> @email OR 
 		     contrasena <> @contrasenaNuevaEncryptada OR 
@@ -104,7 +104,7 @@ BEGIN
 	  END
 
 	IF EXISTS (SELECT 1 FROM Direcciones D
-	   INNER JOIN Clientes C on D.direccionID = C.direccionID
+	   INNER JOIN Clientes C WITH(NOLOCK) ON D.direccionID = C.direccionID
 	   WHERE C.clienteID = @clienteID
 	   AND (codigoPostal <> @codigoPostal OR
 	        colonia <> @colonia OR
@@ -154,14 +154,14 @@ Contacto: moyhc2204gamer@outlook.com
 ******/
 
 EXEC [dbo].[sp_actualizar_cliente]
-  @clienteID = 1,
+  @clienteID = 2,
   @email = 'juanP@ejemplo.com',
   @contrasena = 'contrasena567',
   @token = 'token789',
   @tokenValidacion = 'validacion755',
-  @nombreCliente = 'Juan',
-  @apellidoPaterno = 'Pérez',
-  @apellidoMaterno = 'González',
+  @nombreCliente = 'Carlos',
+  @apellidoPaterno = 'Gomez',
+  @apellidoMaterno = 'Peña',
   @linkImagenPerfil = 'http://imagen.com/perfil.jpg',
   @telefono = '7715679167',
   @generoID = 1,
@@ -172,3 +172,10 @@ EXEC [dbo].[sp_actualizar_cliente]
   @noExt = 202,
   @estadoID = 1,
   @municipio = 'Ciudad Ejemplo';
+
+-- Comprobar los registros en la base de datos
+
+SELECT * FROM [dbo].[Clientes]
+SELECT * FROM [dbo].[Roles]
+SELECT * FROM [dbo].[Direcciones]
+SELECT * FROM [dbo].[Usuarios]

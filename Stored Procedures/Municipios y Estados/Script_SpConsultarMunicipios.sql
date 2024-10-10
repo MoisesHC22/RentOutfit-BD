@@ -8,7 +8,7 @@ Autor: Moisés Jael Hernández Calva
 Contacto: moyhc2204gamer@outlook.com
 ******/
 
-CREATE OR ALTER PROC [dbo].[sp_visualizar_municipios]
+CREATE OR ALTER PROC [dbo].[sp_consultar_municipios]
 (
 @estadoID INT = NULL
 )
@@ -54,7 +54,7 @@ BEGIN TRY
 
 	SET @tipoError = 0;
 	SET @mensaje = 'Operación exitosa.';
-	SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	-- SELECT @tipoError AS tipoError, @mensaje AS mensaje;
 
 END TRY
   BEGIN CATCH
@@ -75,5 +75,5 @@ Comando para ejecutar el stored procedure para consultar los municipio de un
 estado en especifico
 */ 
 
-EXEC [dbo].[sp_visualizar_municipios]
+EXEC [dbo].[sp_consultar_municipios]
 @estadoID = 19;

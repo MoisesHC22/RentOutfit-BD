@@ -62,7 +62,7 @@ BEGIN
 
 	            SET @tipoError = 0;
                 SET @mensaje = 'La cuenta ' + @email + ' inicio correctamente.' ;
-              SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+            --  SELECT @tipoError AS tipoError, @mensaje AS mensaje;
 		    
 		   END
           ELSE

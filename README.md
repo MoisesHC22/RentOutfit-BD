@@ -95,11 +95,11 @@ Para ejecutar la base de datos necesitas:
 | estadoID                        | int             |
 | ultimaModificacionMunicipio     | datetime        |
 
-### 10. Calificaciones
+### 10. Estilos
 | Columna                         | Tipo de dato    |
 |---------------------------------|-----------------|
-| tipoID                          | int (Identity)  |
-| nombreTipo                      | varchar(50)     |
+| estiloID                        | int (Identity)  |
+| nombreEstilo                    | varchar(50)     |
 | ultimaModificacionClasificacion | datetime        |
 
 ### 11. Pedidos
@@ -140,29 +140,22 @@ Para ejecutar la base de datos necesitas:
 | precioPorDia                    | decimal(18,2)   |
 | stock                           | int             |
 | fechaDePublicacion              | date            |
-| tipoID                          | int             |
+| estiloID                        | int             |
 | linkImagenVes                   | varchar(250)    |
 | tallaID                         | int             |
 | establecimientoID               | int             |
 | ultimaModificacionUsuario       | datetime        |
 | vestimentaEstatus               | bit             |
 
-### 15. Clasificaciones
-| Columna                         | Tipo de dato    |
-|---------------------------------|-----------------|
-| tipoID                          | int (Identity)  |
-| nombreTipo                      | varchar(50)     |
-| ultimaModificacionClasificacion | datetime        |
 
-
-### 16. Tallas
+### 15. Tallas
 | Columna                         | Tipo de dato    |
 |---------------------------------|-----------------|
 | tallaID                         | int (Identity)  |
 | nombreTalla                     | varchar(50)     |
 | ultimaModificacionUsuario       | datetime        |
 
-### 17. Chats
+### 16. Chats
 | Columna                         | Tipo de dato    |
 |---------------------------------|-----------------|
 | chatID                          | int (Identity)  |
@@ -172,7 +165,7 @@ Para ejecutar la base de datos necesitas:
 | ultimaModificacionChat          | datetime        |
 | mensajeID                       | int             |
 
-### 18. Mensajes
+### 17. Mensajes
 | Columna                         | Tipo de dato    |
 |---------------------------------|-----------------|
 | mensajeID                       | int (Identity)  |

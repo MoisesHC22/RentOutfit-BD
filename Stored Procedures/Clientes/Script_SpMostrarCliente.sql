@@ -32,7 +32,7 @@ BEGIN
 	     SET @tipoError = 1;
 		 SET @mensaje = 'Aún no tienes Acceso.'
 
-		 SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+		--  SELECT @tipoError AS tipoError, @mensaje AS mensaje;
          RETURN;
 	  END
 
@@ -85,7 +85,7 @@ BEGIN
 
 	      SET @tipoError = 0;
 	      SET @mensaje = 'Consulta de cliente exitosa.';
-	      SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	      -- SELECT @tipoError AS tipoError, @mensaje AS mensaje;
 	    END
 	  ELSE
 	   BEGIN
@@ -94,7 +94,7 @@ BEGIN
 	   
 	         ROLLBACK TRANSACTION;
 
-        	 SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+        	 --SELECT @tipoError AS tipoError, @mensaje AS mensaje;
     	   RETURN;
 	   END
 

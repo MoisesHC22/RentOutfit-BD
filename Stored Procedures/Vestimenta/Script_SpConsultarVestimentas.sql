@@ -12,7 +12,7 @@ Contacto: moyhc2204gamer@outlook.com
 CREATE OR ALTER PROC [dbo].[sp_mostrar_vestimenta]
 (
 @nombrePrenda VARCHAR(50) = NULL,
-@categoria VARCHAR(50) = NULL,
+@estilo VARCHAR(50) = NULL,
 @talla VARCHAR(50) = NULL,
 @establecimiento VARCHAR(50) = NULL,
 @pagina INT = 1
@@ -41,16 +41,16 @@ BEGIN
 	  -- Pruebas
 
 	  T.nombreTalla,
-	  C.nombreTipo,
+	  ES.nombreEstilo,
 	  E.nombreEstablecimiento
 
 	  FROM Vestimentas V
-	    INNER JOIN Clasificacion C WITH(NOLOCK) ON V.tipoID = C.tipoID
+	    INNER JOIN Estilo ES WITH(NOLOCK) ON V.estiloID = ES.estiloID
 		INNER JOIN Tallas T WITH(NOLOCK) ON V.tallaID = T.tallaID
 		INNER JOIN Establecimientos E WITH(NOLOCK) ON V.establecimientoID = E.establecimientosID
 	  WHERE (V.nombrePrenda = @nombrePrenda OR  
 	         T.nombreTalla = @talla OR 
-			 C.nombreTipo = @categoria OR
+			 ES.nombreEstilo = @estilo OR
 			 E.nombreEstablecimiento = @establecimiento)
 	  ORDER BY V.nombrePrenda
 	  OFFSET @offset ROWS

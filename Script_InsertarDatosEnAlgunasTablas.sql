@@ -2529,3 +2529,28 @@ VALUES
 ('Adminstrador', GETDATE());
 
 
+
+/******
+Insertar datos a la tabla de estilos
+Script Date: 08/10/2024 02:38:47 p. m. 
+Autor: Moisés Jael Hernández Calva
+Contacto: moyhc2204gamer@outlook.com
+******/
+
+INSERT INTO Estilo(nombreEstilo, ultimaModificacionClasificacion)
+VALUES
+('Business', GETDATE()),
+('Cocktail', GETDATE()),
+('Gala', GETDATE()),
+('Elegancia Atemporal', GETDATE()),
+('Vintage', GETDATE()),
+('Disfraces de Halloween', GETDATE()),
+('Disfraces Temáticos', GETDATE()),
+('Disfraces de Carnaval', GETDATE()),
+('Togas', GETDATE()),
+('Trajes Regionales', GETDATE()),
+('Uniformes', GETDATE()),
+('Casual', GETDATE()),
+('Minimalista', GETDATE()),
+('Ropa de Baile', GETDATE())
+

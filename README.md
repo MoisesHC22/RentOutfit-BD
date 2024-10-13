@@ -16,7 +16,7 @@ Para ejecutar la base de datos necesitas:
 |---------------------------------|-----------------|
 | usuarioID                       | int (Identity)  |
 | email                           | varchar(50)     |
-| contrasena                      | varchar(255)     |
+| contrasena                      | varchar(255)    |
 | rolID                           | date            |
 | token                           | varchar(50)     |
 | tokenValidacion                 | varchar(50)     |
@@ -100,7 +100,7 @@ Para ejecutar la base de datos necesitas:
 |---------------------------------|-----------------|
 | estiloID                        | int (Identity)  |
 | nombreEstilo                    | varchar(50)     |
-| ultimaModificacionClasificacion | datetime        |
+| ultimaModificacionEstilos       | datetime        |
 
 ### 11. Pedidos
 | Columna                         | Tipo de dato    |
@@ -184,4 +184,4 @@ Frontend Móvil | [Repositorio de Móvil](https://github.com/MoisesHC22/RentOutf
 
 ## Diagrama de base de datos
 
-[![Diagrama-De-Rent-Outfit.png](https://i.postimg.cc/VLc4RjHv/Diagrama-De-Rent-Outfit.png)](https://postimg.cc/w30hxszY)
+[![Rent-Outfit-BD.png](https://i.postimg.cc/7P36scpn/Rent-Outfit-BD.png)](https://postimg.cc/0rNPrt5z)

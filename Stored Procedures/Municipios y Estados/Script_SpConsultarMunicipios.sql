@@ -1,6 +1,4 @@
 
-
-
 /******
 Creación de un stored procedure para consular los municipios de un estado especifico
 Script Date: 04/10/2024 06:20:29 p. m.																		
@@ -34,7 +32,7 @@ BEGIN TRY
 	 SELECT 1 FROM Estados WHERE estadoID = @estadoID
 	)
 	BEGIN
-	   SET @tipoError = 1;
+	   SET @tipoError = 2;
 	   SET @mensaje = 'El estado no existe.';
 
 	     ROLLBACK TRANSACTION;
@@ -62,7 +60,7 @@ END TRY
       IF @@TRANCOUNT > 0
 	     ROLLBACK TRANSACTION;
 
-		 SET @tipoError = 2;
+		 SET @tipoError = 3;
 		 SET @mensaje = ERROR_MESSAGE();
          SELECT @tipoError as tipoError, @mensaje as mensaje;
 
@@ -77,3 +75,4 @@ estado en especifico
 
 EXEC [dbo].[sp_consultar_municipios]
 @estadoID = 19;
+

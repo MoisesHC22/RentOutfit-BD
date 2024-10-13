@@ -10,8 +10,8 @@ CREATE OR ALTER PROC [dbo].[sp_consultar_generos]
 AS
 BEGIN
   SELECT 
-  generoID,
-  nombreGenero
+    generoID,
+    nombreGenero
   FROM Generos
 END
 

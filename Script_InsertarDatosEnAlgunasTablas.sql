@@ -2554,3 +2554,38 @@ VALUES
 ('Minimalista', GETDATE()),
 ('Ropa de Baile', GETDATE())
 
+
+
+
+/******
+Insertar datos a la tabla de tallas
+Script Date: 12/10/2024 06:50:01 p. m. 
+Autor: Moisés Jael Hernández Calva
+Contacto: moyhc2204gamer@outlook.com
+******/
+
+INSERT INTO Tallas(nombreTalla, ultimaModificacionTalla)
+VALUES
+('XS Petite', GETDATE()),
+('S Petite', GETDATE()),
+('M Petite', GETDATE()),
+('L Petite', GETDATE()),
+('XS',GETDATE()),
+('S', GETDATE()),
+('M', GETDATE()),
+('S', GETDATE()),
+('L', GETDATE()),
+('XL', GETDATE()),
+('XXL', GETDATE()),
+('XXXL', GETDATE()),
+('4XL', GETDATE()),
+('5XL', GETDATE()),
+('SM', GETDATE()),
+('ML', GETDATE()),
+('L-LX', GETDATE()),
+('M Tall', GETDATE()),
+('L Tall', GETDATE()),
+('XL Tall', GETDATE()),
+('S Maternity', GETDATE()),
+('M Maternity', GETDATE()),
+('L Maternity', GETDATE());

@@ -4,7 +4,7 @@ GO
 
 /******
 Creación de Stored procedure para crear un cliente.   
-Script Date: 03/10/2024 11:10:05 a. m. 
+Script Date: 13/10/2024 12:10:36 a. m. 
 Autor: Moisés Jael Hernández Calva       
 Contacto: moyhc2204gamer@outlook.com
 ******/
@@ -16,7 +16,6 @@ CREATE OR ALTER PROC [dbo].[sp_registrar_cliente]
 @email VARCHAR(50) = NULL,
 @contrasena VARCHAR(255) = NULL,
 @token VARCHAR(50) = NULL,
-@tokenValidacion VARCHAR(50) = NULL,
 
 -- Cliente
 
@@ -44,11 +43,12 @@ BEGIN
    DECLARE @tipoError INT = 0;
    DECLARE @mensaje NVARCHAR(255)= '';
 
+
    BEGIN TRY
       BEGIN TRANSACTION;
 
 	  --Validación de campos
-	  IF @email IS NULL OR @contrasena IS NULL OR @token IS NULL OR @tokenValidacion IS NULL OR
+	  IF @email IS NULL OR @contrasena IS NULL OR @token IS NULL OR
 	     @nombreCliente IS NULL OR @apellidoPaterno IS NULL OR @apellidoMaterno IS NULL OR @linkImagenPerfil IS NULL OR
 		 @telefono IS NULL OR @generoID IS NULL OR @codigoPostal IS NULL OR @colonia IS NULL OR @calle IS NULL OR
 		 @noInt IS NULL OR @noExt IS NULL OR @estadoID IS NULL OR @municipio IS NULL
@@ -61,37 +61,76 @@ BEGIN
          RETURN;
 	  END
 
-	  -- Insertar el usuario
+	  IF EXISTS(
+	   SELECT 
+		  M.municipioID,
+		  M.estadoID,
+		  E.nombreEstado
+	   FROM Estados E
+	     INNER JOIN Municipios M ON E.estadoID = M.estadoID
+	   WHERE M.nombreMunicipio = @municipio AND E.estadoID = @estadoID
+	  )
+	  BEGIN
+	    
+		  IF EXISTS(
+		   SELECT * FROM Usuarios WHERE email = @email 
+		  )
+		  BEGIN
+	         
+			 SET @tipoError = 2;
+	         SET @mensaje = 'El email ya esta en uso.'
 
-	  DECLARE @usuarioID INT;
-	  DECLARE @contrasenaEncryptada VARBINARY(64) = HASHBYTES('SHA2_256', @contrasena);
-     	  INSERT INTO Usuarios (email, contrasena, token, tokenValidacion, ultimaModificacionUsuario)
-	      VALUES (@email, @contrasenaEncryptada, @token, @tokenValidacion, GETDATE());
-	  SET @usuarioID = SCOPE_IDENTITY();
+	         ROLLBACK TRANSACTION;
 
-	  -- Insertar el rol
+   	         SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	         RETURN;
+		  END
+		ELSE
+		  BEGIN
+		
+	      -- Insertar el usuario
 
-	  DECLARE @rolID INT;
-	      INSERT INTO Roles (detalleRolID, usuarioID, ultimaModificacionRol)
-		  VALUES (1, @usuarioID, GETDATE());
+	      DECLARE @usuarioID INT;
+	      DECLARE @contrasenaEncryptada VARBINARY(64) = HASHBYTES('SHA2_256', @contrasena);
+              INSERT INTO Usuarios (email, contrasena, token, ultimaModificacionUsuario)
+	          VALUES (@email, @contrasenaEncryptada, @token, GETDATE());
+   	      SET @usuarioID = SCOPE_IDENTITY();
 
-	  -- Insertar el domicilio
+	      -- Insertar el rol
 
-	  DECLARE @direccionID INT;
-	      INSERT INTO Direcciones (codigoPostal, colonia, calle, noInt, noExt, ultimaModificacionDireccion, estadoID, municipio)
-		  VALUES (@codigoPostal, @colonia, @calle, @noInt, @noExt, GETDATE() ,@estadoID, @municipio)
-	  SET @direccionID = SCOPE_IDENTITY();
+	      DECLARE @rolID INT;
+	          INSERT INTO Roles (detalleRolID, usuarioID, ultimaModificacionRol)
+		      VALUES (1, @usuarioID, GETDATE());
 
-	  -- Insertar al cliente
+	      -- Insertar el domicilio
 
-	     INSERT INTO Clientes (nombreCliente, apellidoPaterno, apellidoMaterno, linkImagenPerfil, usuarioID, telefono, direccionID, generoID, ultimaModificacionCliente)
-		 VALUES (@nombreCliente, @apellidoPaterno, @apellidoMaterno, @linkImagenPerfil, @usuarioID, @telefono, @direccionID, @generoID, GETDATE())
+	      DECLARE @direccionID INT;
+	          INSERT INTO Direcciones (codigoPostal, colonia, calle, noInt, noExt, ultimaModificacionDireccion, estadoID, municipio)
+		      VALUES (@codigoPostal, @colonia, @calle, @noInt, @noExt, GETDATE() ,@estadoID, @municipio)
+   	      SET @direccionID = SCOPE_IDENTITY();
 
-	  COMMIT TRANSACTION;
+	      -- Insertar al cliente
 
-	  SET @tipoError = 0;
-	  SET @mensaje = 'Se insertó el cliente de forma correcta.';
-	  SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	      INSERT INTO Clientes (nombreCliente, apellidoPaterno, apellidoMaterno, linkImagenPerfil, usuarioID, telefono, direccionID, generoID, ultimaModificacionCliente)
+	      VALUES (@nombreCliente, @apellidoPaterno, @apellidoMaterno, @linkImagenPerfil, @usuarioID, @telefono, @direccionID, @generoID, GETDATE())
+
+  	      COMMIT TRANSACTION;
+
+	      SET @tipoError = 0;
+	      SET @mensaje = 'Se insertó el cliente de forma correcta.';
+	      SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	    END
+	 END
+	ELSE
+	 BEGIN
+	 SET @tipoError = 3;
+	   SET @mensaje = 'El estado y municipio con coinciden.'
+
+	   ROLLBACK TRANSACTION;
+
+	   SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	   RETURN;
+	 END
 
    END TRY
    BEGIN CATCH
@@ -99,7 +138,7 @@ BEGIN
       IF @@TRANCOUNT > 0
 	     ROLLBACK TRANSACTION;
 
-		 SET @tipoError = 2;
+		 SET @tipoError = 3;
 		 SET @mensaje = ERROR_MESSAGE();
          SELECT @tipoError AS tipoError, @mensaje AS mensaje;
 
@@ -120,7 +159,6 @@ Contacto: moyhc2204gamer@outlook.com
        -- @email = 'cliente@ejemplo.com', -- Se omite el email
        @contrasena = 'contrasena123',
        @token = 'token123',
-       @tokenValidacion = 'validacion123',
        @nombreCliente = 'Juan',
        @apellidoPaterno = 'Pérez',
        @apellidoMaterno = 'González',
@@ -140,7 +178,6 @@ Contacto: moyhc2204gamer@outlook.com
        @email = 'cliente@ejemplo.com',
        @contrasena = 'contrasena123',
        @token = 'token123',
-       @tokenValidacion = 'validacion123',
        @nombreCliente = 'Juan',
        @apellidoPaterno = 'Pérez',
        @apellidoMaterno = 'González',
@@ -165,13 +202,12 @@ Contacto: moyhc2204gamer@outlook.com
 ******/
 
    EXEC [dbo].[sp_registrar_cliente]
-       @email = 'cliente@ejemplo.com',
+       @email = 'clientes@ejemplo.com',
        @contrasena = 'contrasena456',
        @token = 'token456',
-       @tokenValidacion = 'validacion456',
-       @nombreCliente = 'Carlos',
-       @apellidoPaterno = 'Gomez',
-       @apellidoMaterno = 'Peña',
+       @nombreCliente = 'Alberto',
+       @apellidoPaterno = 'Riquez',
+       @apellidoMaterno = 'Guzman',
        @linkImagenPerfil = 'http://imagen.com/perfil.jpg',
        @telefono = '5551234599',
        @generoID = 1,
@@ -181,7 +217,7 @@ Contacto: moyhc2204gamer@outlook.com
        @noInt = 101,
        @noExt = 202,
        @estadoID = 1,
-       @municipio = 'Ciudad Ejemplo';
+       @municipio = 'El llano';
 
 -- Comprobar los registros en la base de datos
 

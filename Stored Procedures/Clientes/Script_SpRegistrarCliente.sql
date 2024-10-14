@@ -47,10 +47,10 @@ BEGIN
       BEGIN TRANSACTION;
 
 	  --Validación de campos
-	  IF @email IS NULL OR @contrasena IS NULL OR @token IS NULL OR
-	     @nombreCliente IS NULL OR @apellidoPaterno IS NULL OR @apellidoMaterno IS NULL OR @linkImagenPerfil IS NULL OR
-		 @telefono IS NULL OR @generoID IS NULL OR @codigoPostal IS NULL OR @colonia IS NULL OR @calle IS NULL OR
-		 @noInt IS NULL OR @noExt IS NULL OR @estadoID IS NULL OR @municipio IS NULL
+	  IF @email IS NULL OR @contrasena IS NULL OR @token IS NULL OR @nombreCliente IS NULL OR 
+	     @apellidoPaterno IS NULL OR @apellidoMaterno IS NULL OR @telefono IS NULL OR @generoID IS NULL OR
+		 @codigoPostal IS NULL OR @colonia IS NULL OR @calle IS NULL OR @noInt IS NULL OR @noExt IS NULL OR
+		 @estadoID IS NULL OR @municipio IS NULL
 	  BEGIN
 	     SET @tipoError = 1;
 		 SET @mensaje = 'Uno o más campos requeridos están vacíos.';

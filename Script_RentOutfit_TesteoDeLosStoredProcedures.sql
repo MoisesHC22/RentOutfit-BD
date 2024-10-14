@@ -149,7 +149,7 @@ Contacto: moyhc2204gamer@outlook.com
 
 
 /******
-Creación de Stored procedure para dar de alta un nuevo vendedor.
+Testeo del Stored procedure para dar de alta un nuevo vendedor.
 Script Date: 05/10/2024 10:53:12 p. m. 
 Autor: Moisés Jael Hernández Calva       
 Contacto: moyhc2204gamer@outlook.com
@@ -307,7 +307,7 @@ EXEC [dbo].[sp_Iniciar_Sesion]
 
 
 /******
-Creación del stored procedure para consultar todos los municipios.
+Testeo del stored procedure para consultar todos los municipios.
 Script Date: 04/10/2024 05:50:34 p. m.																		
 Autor: Moisés Jael Hernández Calva       
 Contacto: moyhc2204gamer@outlook.com
@@ -318,7 +318,7 @@ EXEC [dbo].[sp_consultar_estados];
 
 
 /******
-Creación de un stored procedure para consultar los municipio de un estado en especifico.
+Testeo del stored procedure para consultar los municipio de un estado en especifico.
 Script Date: 04/10/2024 06:20:29 p. m.																		
 Autor: Moisés Jael Hernández Calva       
 Contacto: moyhc2204gamer@outlook.com
@@ -330,7 +330,7 @@ EXEC [dbo].[sp_consultar_municipios]
 
 
 /******
-Creación de Stored procedure para dar de alta un establecimiento.
+Testeo del Stored procedure para dar de alta un establecimiento.
 Script Date: 06/10/2024 01:58:16 a. m. 
 Autor: Moisés Jael Hernández Calva       
 Contacto: moyhc2204gamer@outlook.com
@@ -364,7 +364,7 @@ EXEC [dbo].[sp_DarDeAlta_Establecimiento]
 
 
 /******
-Creación de Stored procedure para consultar las tallas.   
+Testeo del Stored procedure para consultar las tallas.   
 Script Date: 13/10/2024 12:15:19 a. m. 
 Autor: Bryan Hernández Garcia       
 Contacto: bryanhernandez1103@gmail.com
@@ -375,7 +375,7 @@ EXEC [dbo].[sp_consultar_tallas]
 
 
 /******
-Creación de Stored procedure para consultar los estilos.
+Testeo del Stored procedure para consultar los estilos.
 Script Date: 13/10/2024 02:59:43 p. m. 
 Autor: Bryan Hernández Garcia      
 Contacto: bryanhernandez1103@gmail.com

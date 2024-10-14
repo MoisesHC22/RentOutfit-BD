@@ -1,3 +1,6 @@
+USE [RentOutfit]
+GO
+
 
 /******
 Creación de un stored procedure para consular los municipios de un estado especifico
@@ -66,13 +69,3 @@ END TRY
 
    END CATCH
 END
-
-
-/*
-Comando para ejecutar el stored procedure para consultar los municipio de un 
-estado en especifico
-*/ 
-
-EXEC [dbo].[sp_consultar_municipios]
-@estadoID = 19;
-

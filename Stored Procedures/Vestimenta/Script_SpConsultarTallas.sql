@@ -2,7 +2,6 @@ USE [RentOutfit]
 GO
 
 
-
 /******
 Creación de Stored procedure para consultar las tallas.   
 Script Date: 13/10/2024 12:15:19 a. m. 
@@ -18,6 +17,3 @@ BEGIN
      nombreTalla
    FROM Tallas
 END
-
--- Comando para ejecutar el stored procedure para consultar las tallas
-EXEC [dbo].[sp_consultar_tallas]

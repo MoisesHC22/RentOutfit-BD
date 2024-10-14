@@ -2,7 +2,6 @@ USE [RentOutfit]
 GO
 
 
-
 /******
 Creación de Stored procedure para dar de alta un establecimiento  
 Script Date: 06/10/2024 01:58:16 a. m. 
@@ -103,7 +102,6 @@ BEGIN
 			SELECT @tipoError AS tipoError, @mensaje AS mensaje;
 
 	      END;
-
 	END
 	ElSE
 	  BEGIN
@@ -129,37 +127,3 @@ BEGIN
   
   END CATCH
 END;
-
-
-
--- Testeo del Stored procedure incorrectamente
-EXEC [dbo].[sp_DarDeAlta_Establecimiento]
-     @usuarioID = 1,
-     @nombreEstablecimiento = 'A toda facha',
-     @codigoPostal = '44445',
-     @colonia = 'Centro',
-     @calle = 'Segunda',
-     @noInt = 59,
-     @noExt = 654,
-     @estadoID = 1,
-     @municipio = 'Ciudad Ejemplo';
-
-
-
--- Testeo del Stored procedure correctamente
-EXEC [dbo].[sp_DarDeAlta_Establecimiento]
-     @usuarioID = 2,
-     @nombreEstablecimiento = 'A toda facha',
-     @codigoPostal = '44445',
-     @colonia = 'Centro',
-     @calle = 'Segunda',
-     @noInt = 59,
-     @noExt = 654,
-     @estadoID = 1,
-     @municipio = 'Ciudad Ejemplo';
-
-
-
--- Comprobar los registros en la base de datos
-SELECT * FROM Establecimientos;
-SELECT * FROM Direcciones;

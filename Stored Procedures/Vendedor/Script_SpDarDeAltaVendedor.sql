@@ -70,14 +70,3 @@ BEGIN
   
   END CATCH
 END
-
-
--- Testeo del Stored procedure correctamente
-
-EXEC [dbo].[sp_DardeAlta_Vendedor]
-@usuarioID = 2
-
---Testeo de un registro inexistente
-
-EXEC [dbo].[sp_DardeAlta_Vendedor]
-@usuarioID = 99

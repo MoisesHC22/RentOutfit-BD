@@ -1,3 +1,6 @@
+USE [RentOutfit]
+GO
+
 
 /******
 Creación del stored procedure para consultar los generos
@@ -14,6 +17,3 @@ BEGIN
     nombreGenero
   FROM Generos
 END
-
--- Comando para ejecutar el stored procedure para consultar todos los generos
-EXEC [dbo].[sp_consultar_generos]

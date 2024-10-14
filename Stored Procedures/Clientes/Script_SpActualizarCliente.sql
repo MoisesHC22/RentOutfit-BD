@@ -45,6 +45,7 @@ BEGIN
 
   DECLARE @tipoError INT = 0;
   DECLARE @mensaje NVARCHAR(255)= '';
+  DECLARE @emailActual VARCHAR(50) = NULL;
 
   BEGIN TRY
     BEGIN TRANSACTION;
@@ -60,77 +61,114 @@ BEGIN
         RETURN;
 	  END
 
-	IF EXISTS (SELECT 1 FROM Clientes
-	  WHERE clienteID = @clienteID
-	  AND (nombreCliente <> @nombreCliente OR
-	       apellidoMaterno <> @apellidoMaterno OR
-		   apellidoPaterno <> @apellidoPaterno OR
-		   linkImagenPerfil <> @linkImagenPerfil OR
-		   telefono <> @telefono OR
-		   generoID <> @generoID))
-	 BEGIN
-        UPDATE Clientes
-	    SET nombreCliente = @nombreCliente,
-	        apellidoMaterno = @apellidoMaterno,
-		    apellidoPaterno = @apellidoPaterno,
-		    linkImagenPerfil = @linkImagenPerfil,
-		    telefono = @telefono,
-		    generoID = @generoID,
-	        ultimaModificacionCliente = GETDATE()
-	    WHERE clienteID = @clienteID;
-	 END
+      SELECT @emailActual = U.email
+	  FROM Usuarios U
+	    INNER JOIN Clientes C ON U.usuarioID = C.usuarioID
+	  WHERE C.clienteID = @clienteID;
 
+	  IF @emailActual <> @email
+	   BEGIN
+	     IF EXISTS (SELECT 1 FROM Usuarios WHERE email = @email)
+	      BEGIN
+	        SET @tipoError = 2;
+		    SET @mensaje = 'El nuevo correo ya está registrado por otro usuario.'
 
+		    ROLLBACK TRANSACTION;
+		    SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+            RETURN;
+	     END
+       END
 
-	 DECLARE @contrasenaNuevaEncryptada VARBINARY(64) = NULL;
-	   IF @contrasena IS NOT NULL
-	   SET @contrasenaNuevaEncryptada = HASHBYTES('SHA2_256', @contrasena);
+	    IF EXISTS(
+	      SELECT
+	         M.municipioID,
+	         M.estadoID,
+	         E.nombreEstado
+	      FROM Estados E
+	        INNER JOIN Municipios M ON E.estadoID = M.estadoID
+	      WHERE M.nombreMunicipio = @municipio AND E.estadoID = @estadoID)
+	      BEGIN
+	    	IF EXISTS (SELECT 1 FROM Clientes
+	        WHERE clienteID = @clienteID
+	        AND (nombreCliente <> @nombreCliente OR
+	            apellidoMaterno <> @apellidoMaterno OR
+		        apellidoPaterno <> @apellidoPaterno OR
+		        linkImagenPerfil <> @linkImagenPerfil OR
+		        telefono <> @telefono OR
+		        generoID <> @generoID))
+	        BEGIN
+            UPDATE Clientes
+	        SET nombreCliente = @nombreCliente,
+	           apellidoMaterno = @apellidoMaterno,
+		       apellidoPaterno = @apellidoPaterno,
+		       linkImagenPerfil = @linkImagenPerfil,
+		       telefono = @telefono,
+		       generoID = @generoID,
+	           ultimaModificacionCliente = GETDATE()
+	        WHERE clienteID = @clienteID;
+   	      END
+
+	      DECLARE @contrasenaNuevaEncryptada VARBINARY(64) = NULL;
+	      IF @contrasena IS NOT NULL
+	      SET @contrasenaNuevaEncryptada = HASHBYTES('SHA2_256', @contrasena);
 	   
-	IF EXISTS (SELECT 1 FROM Usuarios U
-	   INNER JOIN Clientes C WITH(NOLOCK) ON U.usuarioID = C.usuarioID
-		WHERE C.clienteID = @clienteID
-		AND (email <> @email OR 
-		     contrasena <> @contrasenaNuevaEncryptada OR 
-			 token <> @token OR
-			 tokenValidacion <> @tokenValidacion))
-      BEGIN
-	    UPDATE Usuarios
-	    SET email = @email,
-	        contrasena = @contrasenaNuevaEncryptada,
-		    token = @token,
-		    tokenValidacion = @tokenValidacion,
-		    ultimaModificacionUsuario = GETDATE()
-	    WHERE usuarioID = (SELECT usuarioID FROM Clientes WHERE clienteID = @clienteID);
+	      IF EXISTS (SELECT 1 FROM Usuarios U
+	        INNER JOIN Clientes C WITH(NOLOCK) ON U.usuarioID = C.usuarioID
+		  WHERE C.clienteID = @clienteID
+	   	  AND (email <> @email OR 
+		      contrasena <> @contrasenaNuevaEncryptada OR 
+			  token <> @token OR
+			  tokenValidacion <> @tokenValidacion))
+          BEGIN
+	      UPDATE Usuarios
+	      SET email = @email,
+	          contrasena = @contrasenaNuevaEncryptada,
+		      token = @token,
+		      tokenValidacion = @tokenValidacion,
+		      ultimaModificacionUsuario = GETDATE()
+	       WHERE usuarioID = (SELECT usuarioID FROM Clientes WHERE clienteID = @clienteID);
+	     END
+
+	     IF EXISTS (SELECT 1 FROM Direcciones D
+	           INNER JOIN Clientes C WITH(NOLOCK) ON D.direccionID = C.direccionID
+	         WHERE C.clienteID = @clienteID
+	       AND (codigoPostal <> @codigoPostal OR
+	           colonia <> @colonia OR
+			   calle <> @calle OR
+			   noInt <> @noInt OR
+			   noExt <> @noExt OR
+			   estadoID <> @estadoID OR
+		  	   municipio <> @municipio))
+	       BEGIN
+	       UPDATE Direcciones
+	       SET codigoPostal = @codigoPostal,
+	          colonia = @colonia,
+		      calle = @calle,
+		      noInt = @noInt,
+		      noExt = @noExt,
+		      estadoID = @estadoID,
+		      municipio = @municipio,
+		      ultimaModificacionDireccion = GETDATE()
+	        WHERE direccionID = (SELECT direccionID FROM Clientes WHERE clienteID = @clienteID);
+	       END
+
+	       COMMIT TRANSACTION;
+
+	       SET @tipoError = 0;
+	       SET @mensaje = 'Actualización exitosa.';
+   	       SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+
+	   END
+	ELSE
+	  BEGIN
+         SET @tipoError = 3;
+	     SET @mensaje = 'El estado y municipio con coinciden.'
+
+	     ROLLBACK TRANSACTION;
+
+	     SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	   RETURN;
 	  END
-
-	IF EXISTS (SELECT 1 FROM Direcciones D
-	   INNER JOIN Clientes C WITH(NOLOCK) ON D.direccionID = C.direccionID
-	   WHERE C.clienteID = @clienteID
-	   AND (codigoPostal <> @codigoPostal OR
-	        colonia <> @colonia OR
-			calle <> @calle OR
-			noInt <> @noInt OR
-			noExt <> @noExt OR
-			estadoID <> @estadoID OR
-			municipio <> @municipio))
-	 BEGIN
-	   UPDATE Direcciones
-	   SET codigoPostal = @codigoPostal,
-	       colonia = @colonia,
-		   calle = @calle,
-		   noInt = @noInt,
-		   noExt = @noExt,
-		   estadoID = @estadoID,
-		   municipio = @municipio,
-		   ultimaModificacionDireccion = GETDATE()
-	   WHERE direccionID = (SELECT direccionID FROM Clientes WHERE clienteID = @clienteID);
-	 END
-
-	COMMIT TRANSACTION;
-
-	SET @tipoError = 0;
-	SET @mensaje = 'Actualización exitosa.';
-	SELECT @tipoError AS tipoError, @mensaje AS mensaje;
 
   END TRY
   BEGIN CATCH
@@ -143,39 +181,4 @@ BEGIN
          SELECT @tipoError AS tipoError, @mensaje AS mensaje;
   
   END CATCH
-
 END
-
-/******
-Testeo del Store procedure para actualizar un cliente.
-Script Date: 04/10/2024 03:43:56 p. m. 
-Autor: Moisés Jael Hernández Calva       
-Contacto: moyhc2204gamer@outlook.com
-******/
-
-EXEC [dbo].[sp_actualizar_cliente]
-  @clienteID = 2,
-  @email = 'juanP@ejemplo.com',
-  @contrasena = 'contrasena567',
-  @token = 'token789',
-  @tokenValidacion = 'validacion755',
-  @nombreCliente = 'Carlos',
-  @apellidoPaterno = 'Gomez',
-  @apellidoMaterno = 'Peña',
-  @linkImagenPerfil = 'http://imagen.com/perfil.jpg',
-  @telefono = '7715679167',
-  @generoID = 1,
-  @codigoPostal = '78942',
-  @colonia = 'Centro',
-  @calle = 'Primera',
-  @noInt = 101,
-  @noExt = 202,
-  @estadoID = 1,
-  @municipio = 'Ciudad Ejemplo';
-
--- Comprobar los registros en la base de datos
-
-SELECT * FROM [dbo].[Clientes]
-SELECT * FROM [dbo].[Roles]
-SELECT * FROM [dbo].[Direcciones]
-SELECT * FROM [dbo].[Usuarios]

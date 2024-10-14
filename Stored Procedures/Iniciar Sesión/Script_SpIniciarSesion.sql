@@ -2,7 +2,6 @@ USE [RentOutfit]
 GO
 
 
-
 /******
 Creación de Stored procedure para iniciar sesión  
 Script Date: 07/10/2024 01:48:16 a. m. 
@@ -103,24 +102,3 @@ BEGIN
   
   END CATCH
 END
-
-
-
--- Testeo correcto del Stored procedure
-EXEC [dbo].[sp_Iniciar_Sesion]
-@email = 'cliente@ejemplo.com',
-@contrasena = 'contrasena123'
-
-
-
--- Testeo incorrecto del Stored procedure
-
--- Correo incorrecto
-EXEC [dbo].[sp_Iniciar_Sesion]
-@email = 'cliente@ejemplo.co',
-@contrasena = 'contrasena123'
-
--- Contraseña incorrecta
-EXEC [dbo].[sp_Iniciar_Sesion]
-@email = 'cliente@ejemplo.com',
-@contrasena = 'contrasena12'

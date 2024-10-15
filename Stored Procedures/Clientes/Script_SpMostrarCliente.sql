@@ -53,7 +53,6 @@ BEGIN
 	      SELECT
 	       C.usuarioID,
 		   U.email,
-		   U.contrasena,
 
 		   C.nombreCliente,
 		   C.apellidoMaterno,

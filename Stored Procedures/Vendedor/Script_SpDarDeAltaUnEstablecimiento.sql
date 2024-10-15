@@ -40,20 +40,11 @@ BEGIN
   BEGIN TRY
     BEGIN TRANSACTION;
 
-	IF @usuarioID IS NULL
-	   BEGIN
-	    SET @tipoError = 1;
-		SET @mensaje = 'No tienes acceso a esta funcion.'
-
-		ROLLBACK TRANSACTION;
-		SELECT @tipoError AS tipoError, @mensaje AS mensaje;
-        RETURN;
-	   END;
-
-	IF @nombreEstablecimiento IS NULL OR @codigoPostal IS NULL OR @colonia IS NULL OR @calle IS NULL OR
-		 @noInt IS NULL OR @noExt IS NULL OR @estadoID IS NULL OR @municipio IS NULL
-    BEGIN
-	     SET @tipoError = 2;
+	IF @usuarioID IS NULL OR @nombreEstablecimiento IS NULL OR @codigoPostal IS NULL OR @colonia IS NULL OR
+	   @calle IS NULL OR @noInt IS NULL OR @noExt IS NULL OR @estadoID IS NULL OR @municipio IS NULL
+     BEGIN
+	     
+		 SET @tipoError = 1;
 		 SET @mensaje = 'Uno o más campos requeridos están vacíos.';
 
 		 ROLLBACK TRANSACTION;
@@ -61,18 +52,26 @@ BEGIN
          RETURN;
 	 END
 
-
-
     IF EXISTS (SELECT 1 FROM Usuarios WHERE usuarioID = @usuarioID)
-	BEGIN
-
+	 BEGIn
+  
+       IF EXISTS(
 	   SELECT 
-	   @clienteID = C.clienteID,
-	   @detalleRolID = R.detalleRolID
-	   FROM Roles R
-	    INNER JOIN Usuarios U WITH(NOLOCK) ON R.usuarioID = U.usuarioID
-		INNER JOIN Clientes C WITH(NOLOCK) ON R.usuarioID = C.usuarioID
-	   WHERE R.usuarioID = @usuarioID;
+		  M.municipioID,
+		  M.estadoID,
+		  E.nombreEstado
+	   FROM Estados E
+	     INNER JOIN Municipios M ON E.estadoID = M.estadoID
+	   WHERE M.nombreMunicipio = @municipio AND E.estadoID = @estadoID)
+	    BEGIN
+		 
+		 SELECT 
+	           @clienteID = C.clienteID,
+	           @detalleRolID = R.detalleRolID
+	     FROM Roles R
+	       INNER JOIN Usuarios U WITH(NOLOCK) ON R.usuarioID = U.usuarioID
+		   INNER JOIN Clientes C WITH(NOLOCK) ON R.usuarioID = C.usuarioID
+	     WHERE R.usuarioID = @usuarioID;
 
 
 	   IF @detalleRolID = 2
@@ -85,43 +84,54 @@ BEGIN
 	         INSERT INTO Establecimientos (clienteID, nombreEstablecimiento, direccionID, ultimaModificacionEstablecimiento)
 	         VALUES (@clienteID, @nombreEstablecimiento, @direccionID, GETDATE())
 
-		 COMMIT TRANSACTION;
+  		   COMMIT TRANSACTION;
 
-	     SET @tipoError = 0;
-         SET @mensaje = 'Se dio de alta Establecimiento con exito.';
-         SELECT @tipoError AS tipoError, @mensaje AS mensaje;
-		    
-	   END
-	   ELSE
-	      BEGIN
-        	
-			SET @tipoError = 3;
-	        SET @mensaje = 'No tienes acceso.';
-	        
-			ROLLBACK TRANSACTION;
-			SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	       SET @tipoError = 0;
+           SET @mensaje = 'Se dio de alta Establecimiento con exito.';
+           SELECT @tipoError AS tipoError, @mensaje AS mensaje;
 
-	      END;
-	END
-	ElSE
-	  BEGIN
+		 END
+        ElSE
+ 	      BEGIN
     	
-       SET @tipoError = 4;
-	   SET @mensaje = 'El usuario no existe.';
+             SET @tipoError = 2;
+	          SET @mensaje = 'No tienes acceso a esta funcion.';
 	   
+	          ROLLBACK TRANSACTION;
+
+	          SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	        RETURN;
+	      END;
+		END
+	   ELSE
+	    BEGIN
+            
+		    SET @tipoError = 3;
+	        SET @mensaje = 'El estado y municipio con coinciden.'
+
+	        ROLLBACK TRANSACTION;
+
+	        SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+	      RETURN;
+		END
+	 END
+	ELSE
+	 BEGIn
+        	
+	    SET @tipoError = 4;
+	    SET @mensaje = 'No tienes acceso.';
+	        
 	    ROLLBACK TRANSACTION;
+	    SELECT @tipoError AS tipoError, @mensaje AS mensaje;
 
-	   SELECT @tipoError AS tipoError, @mensaje AS mensaje;
-	   RETURN;
-	  END;
-
+	 END
   END TRY
   BEGIN CATCH
 
     IF @@TRANCOUNT > 0
 	     ROLLBACK TRANSACTION;
 
-		 SET @tipoError = 5;
+		 SET @tipoError = 6;
 		 SET @mensaje = ERROR_MESSAGE();
          SELECT @tipoError AS tipoError, @mensaje AS mensaje;
   

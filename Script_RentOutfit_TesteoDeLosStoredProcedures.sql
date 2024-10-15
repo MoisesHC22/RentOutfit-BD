@@ -339,20 +339,20 @@ EXEC [dbo].[sp_DarDeAlta_Establecimiento]
      @noInt = 59,
      @noExt = 654,
      @estadoID = 1,
-     @municipio = 'Ciudad Ejemplo';
+     @municipio = 'El llano';
 
 
 -- Testeo correctamente
 EXEC [dbo].[sp_DarDeAlta_Establecimiento]
-     @usuarioID = 2,
-     @nombreEstablecimiento = 'A toda facha',
+     @usuarioID = 7,
+     @nombreEstablecimiento = 'Ropa tumbada',
      @codigoPostal = '44445',
      @colonia = 'Centro',
      @calle = 'Segunda',
      @noInt = 59,
      @noExt = 654,
      @estadoID = 1,
-     @municipio = 'Ciudad Ejemplo';
+     @municipio = 'Aguascalientes';
 
 
 

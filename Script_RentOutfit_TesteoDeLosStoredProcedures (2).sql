@@ -375,3 +375,73 @@ Contacto: bryanhernandez1103@gmail.com
 ******/
 
 EXEC [dbo].[sp_consultar_estilos]
+
+
+
+/******
+Testeo del Stored procedure para obtener el token para recuperar la contraseña.
+Script Date: 14/10/2024 06:23:33 p. m. 
+Autor: Bryan Hernández Garcia      
+Contacto: bryanhernandez1103@gmail.com
+******/
+
+-- Testeo correcto
+EXEC [dbo].[sp_olvideLaContrasena_Email]
+     @email = 'clientes@ejemplo.com';
+
+
+-- Error al mandar un correo inexistente
+
+ EXEC [dbo].[sp_olvideLaContrasena_Email]
+ @email = 'clientes@ejemplo.co';
+
+ -- Error de no mandar un correo
+  EXEC [dbo].[sp_olvideLaContrasena_Email];
+
+
+
+/******
+Testeo del Stored procedure para validar el token para recuperar la contraseña.
+Script Date: 14/10/2024 06:30:07 p. m. 
+Autor: Bryan Hernández Garcia      
+Contacto: bryanhernandez1103@gmail.com
+******/
+
+-- Testeo correcto
+EXEC [dbo].[sp_olvideLaContrasena_Token]
+@email = 'clientes@ejemplo.com',
+@token = 'token456';
+
+
+-- Error de mandar un campo nulo
+EXEC [dbo].[sp_olvideLaContrasena_Token]
+@email = 'clientes@ejemplo.com';
+
+-- Error de mandar un campo inexistente
+EXEC [dbo].[sp_olvideLaContrasena_Token]
+@email = 'clientes@ejemplo.com',
+@token = 'token45';
+
+
+
+/******
+Testeo del Stored procedure para actualizar la contraseña.
+Script Date: 14/10/2024 06:35:41 p. m. 
+Autor: Bryan Hernández Garcia      
+Contacto: bryanhernandez1103@gmail.com
+******/
+
+-- Testeo Correcto
+EXEC [dbo].[sp_olvideLaContrasena_Actualizacion]
+@email = 'clientes@ejemplo.com',
+@contrasena = 'Contraseña9123';
+
+
+-- Error de mandar un correo inexistente
+EXEC [dbo].[sp_olvideLaContrasena_Actualizacion]
+@email = 'clientes@ejemplo.co',
+@contrasena = 'Contraseña123';
+
+-- Error de mandar un campo nulo
+EXEC [dbo].[sp_olvideLaContrasena_Actualizacion]
+@email = 'clientes@ejemplo.com';

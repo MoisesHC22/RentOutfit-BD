@@ -51,22 +51,24 @@ BEGIN
 	      WHERE U.usuarioID = @usuarioID
 
 	      SELECT
-	       C.clienteID,
+	       C.usuarioID,
+		   U.email,
+		   U.contrasena,
+
 		   C.nombreCliente,
 		   C.apellidoMaterno,
 		   C.apellidoPaterno,
 		   C.linkImagenPerfil,
 		   C.telefono,
 		   G.nombreGenero AS genero,
+		   
+		   D.codigoPostal,
+		   D.colonia,
 		   D.calle,
 		   D.noExt,
 		   D.noInt,
-		   D.colonia,
-		   D.codigoPostal,
-		   D.municipio,
 		   E.nombreEstado AS estado,
-		   U.email,
-		   U.contrasena
+		   D.municipio
 	      FROM Usuarios U
             INNER JOIN Clientes C ON U.usuarioID = C.usuarioID
 		    INNER JOIN Roles R ON U.usuarioID = R.usuarioID

@@ -1,7 +1,6 @@
 USE [RentOutfit]
 GO
 
-
 /******
 Testeo de errores para Store procedure para registrar un nuevo cliente.
 Script Date: 03/10/2024 11:48:14 a. m. 
@@ -206,11 +205,9 @@ Contacto: moyhc2204gamer@outlook.com
 
 -- Testeo correcto 
 EXEC [dbo].[sp_actualizar_cliente]
-  @clienteID = 1,
+  @usuarioID = 1,
   @email = 'clientes@ejemplo.com',
-  @contrasena = 'contrasena444',
   @token = 'token456',
-  @tokenValidacion = 'validacion755',
   @nombreCliente = 'Alberto',
   @apellidoPaterno = 'Riquez',
   @apellidoMaterno = 'Guzman',
@@ -228,11 +225,9 @@ EXEC [dbo].[sp_actualizar_cliente]
 
 -- Error de usar otro correo que registro otro usuario
 EXEC [dbo].[sp_actualizar_cliente]
-  @clienteID = 1,
+  @usuarioID = 1,
   @email = 'Fatima23@ejemplo.com',
-  @contrasena = 'contrasena444',
   @token = 'token456',
-  @tokenValidacion = 'validacion755',
   @nombreCliente = 'Alberto',
   @apellidoPaterno = 'Riquez',
   @apellidoMaterno = 'Guzman',
@@ -249,11 +244,9 @@ EXEC [dbo].[sp_actualizar_cliente]
 
 -- Error de un municipio y estado que no coinciden
 EXEC [dbo].[sp_actualizar_cliente]
-  @clienteID = 1,
+  @usuarioID = 1,
   @email = 'clientes@ejemplo.com',
-  @contrasena = 'contrasena444',
   @token = 'token456',
-  @tokenValidacion = 'validacion755',
   @nombreCliente = 'Alberto',
   @apellidoPaterno = 'Riquez',
   @apellidoMaterno = 'Guzman',

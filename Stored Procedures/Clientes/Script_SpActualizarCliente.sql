@@ -4,7 +4,7 @@ GO
 
 /******
 Creación de Stored procedure para actualizar un cliente.   
-Script Date: 05/10/2024 07:21:56 p. m. 																	
+Script Date: 14/10/2024 01:30:51 p. m. 																	
 Autor: Moisés Jael Hernández Calva       
 Contacto: moyhc2204gamer@outlook.com
 ******/
@@ -13,12 +13,9 @@ CREATE OR ALTER PROC [dbo].[sp_actualizar_cliente]
 (
 
 --Usuarios
-
-@clienteID INT = NULL,
+@usuarioID INT = NULL,
 @email VARCHAR(50),
-@contrasena VARCHAR(255),
 @token VARCHAR(50),
-@tokenValidacion VARCHAR(50),
 
 -- Cliente
 
@@ -51,7 +48,7 @@ BEGIN
     BEGIN TRANSACTION;
 
 	-- Validación del campo
-	IF @clienteID IS NULL
+	IF @usuarioID IS NULL
 	  BEGIN
 	    SET @tipoError = 1;
 		SET @mensaje = 'Debe proporcionar al menos un ID para actualizar.';
@@ -64,7 +61,7 @@ BEGIN
       SELECT @emailActual = U.email
 	  FROM Usuarios U
 	    INNER JOIN Clientes C ON U.usuarioID = C.usuarioID
-	  WHERE C.clienteID = @clienteID;
+	  WHERE C.usuarioID = @usuarioID;
 
 	  IF @emailActual <> @email
 	   BEGIN
@@ -88,8 +85,9 @@ BEGIN
 	        INNER JOIN Municipios M ON E.estadoID = M.estadoID
 	      WHERE M.nombreMunicipio = @municipio AND E.estadoID = @estadoID)
 	      BEGIN
+
 	    	IF EXISTS (SELECT 1 FROM Clientes
-	        WHERE clienteID = @clienteID
+	        WHERE usuarioID = usuarioID
 	        AND (nombreCliente <> @nombreCliente OR
 	            apellidoMaterno <> @apellidoMaterno OR
 		        apellidoPaterno <> @apellidoPaterno OR
@@ -105,33 +103,24 @@ BEGIN
 		       telefono = @telefono,
 		       generoID = @generoID,
 	           ultimaModificacionCliente = GETDATE()
-	        WHERE clienteID = @clienteID;
+	        WHERE usuarioID = @usuarioID;
    	      END
 
-	      DECLARE @contrasenaNuevaEncryptada VARBINARY(64) = NULL;
-	      IF @contrasena IS NOT NULL
-	      SET @contrasenaNuevaEncryptada = HASHBYTES('SHA2_256', @contrasena);
-	   
 	      IF EXISTS (SELECT 1 FROM Usuarios U
-	        INNER JOIN Clientes C WITH(NOLOCK) ON U.usuarioID = C.usuarioID
-		  WHERE C.clienteID = @clienteID
+		     WHERE usuarioID = @usuarioID
 	   	  AND (email <> @email OR 
-		      contrasena <> @contrasenaNuevaEncryptada OR 
-			  token <> @token OR
-			  tokenValidacion <> @tokenValidacion))
+			  token <> @token))
           BEGIN
 	      UPDATE Usuarios
 	      SET email = @email,
-	          contrasena = @contrasenaNuevaEncryptada,
 		      token = @token,
-		      tokenValidacion = @tokenValidacion,
 		      ultimaModificacionUsuario = GETDATE()
-	       WHERE usuarioID = (SELECT usuarioID FROM Clientes WHERE clienteID = @clienteID);
+	       WHERE usuarioID = @usuarioID;
 	     END
 
 	     IF EXISTS (SELECT 1 FROM Direcciones D
 	           INNER JOIN Clientes C WITH(NOLOCK) ON D.direccionID = C.direccionID
-	         WHERE C.clienteID = @clienteID
+	         WHERE C.usuarioID = @usuarioID
 	       AND (codigoPostal <> @codigoPostal OR
 	           colonia <> @colonia OR
 			   calle <> @calle OR
@@ -149,7 +138,7 @@ BEGIN
 		      estadoID = @estadoID,
 		      municipio = @municipio,
 		      ultimaModificacionDireccion = GETDATE()
-	        WHERE direccionID = (SELECT direccionID FROM Clientes WHERE clienteID = @clienteID);
+	        WHERE direccionID = (SELECT direccionID FROM Clientes WHERE usuarioID = @usuarioID);
 	       END
 
 	       COMMIT TRANSACTION;

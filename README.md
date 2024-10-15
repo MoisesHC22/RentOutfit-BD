@@ -173,6 +173,15 @@ Para ejecutar la base de datos necesitas:
 | fechaEnvio                      | datetime        |
 | ultimaModificacionUsuario       | datetime        |
 
+### 18. ImagenesVes
+| Columna                         | Tipo de dato    |
+|---------------------------------|-----------------|
+| imagenesVesID                   | int (Identity)  |
+| imagen1                         | varchar(250)    |
+| imagen2                         | varchar(250)    |
+| imagen3                         | varchar(250)    |
+| ultimaModificacionImgVes        | datetime        |
+
 
 
 ## Este proyecto está vinculado con estos otros repositorios
@@ -184,4 +193,4 @@ Frontend Móvil | [Repositorio de Móvil](https://github.com/MoisesHC22/RentOutf
 
 ## Diagrama de base de datos
 
-[![Rent-Outfit-BD.png](https://i.postimg.cc/7P36scpn/Rent-Outfit-BD.png)](https://postimg.cc/0rNPrt5z)
+[![Rent-Outfit-BD.png](https://i.postimg.cc/vTN3Vh50/Rent-Outfit-BD.png)](https://postimg.cc/zHTCmnth)

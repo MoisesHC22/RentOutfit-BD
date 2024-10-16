@@ -10,7 +10,7 @@ Contacto: moyhc2204gamer@outlook.com
 
     -- Testeo correctos para insertar clientes 
     EXEC [dbo].[sp_registrar_cliente]
-       @email = 'clientes@ejemplo.com',
+       @email = 'bryanhernandez1103@gmail.com',
        @contrasena = 'contrasena456',
        @token = 'token456',
        @nombreCliente = 'Alberto',
@@ -28,7 +28,7 @@ Contacto: moyhc2204gamer@outlook.com
        @municipio = 'El llano';
 
    EXEC [dbo].[sp_registrar_cliente]
-       @email = 'Fatima23@ejemplo.com',
+       @email = '21300056@uttt.edu.mx',
        @contrasena = 'contrasena123',
        @token = 'token123',
        @nombreCliente = 'Fatima',
@@ -46,7 +46,7 @@ Contacto: moyhc2204gamer@outlook.com
        @municipio = 'Jojutla';
 
    EXEC [dbo].[sp_registrar_cliente]
-       @email = 'PabloMiAngelitoMix@ejemplo.com',
+       @email = 'acnarok@gmail.com',
        @contrasena = 'contrasena789',
        @token = 'token789',
        @nombreCliente = 'Pablo',
@@ -71,7 +71,7 @@ Contacto: moyhc2204gamer@outlook.com
 
    -- Validar los requerimientos nulos
    EXEC [dbo].[sp_registrar_cliente]
-       -- @email = 'cliente@ejemplo.com', -- Se omite el email
+       -- @email = 'bryanhernandez1103@gmail.com', -- Se omite el email
        @contrasena = 'contrasena123',
        @token = 'token123',
        @nombreCliente = 'Juan',
@@ -90,7 +90,7 @@ Contacto: moyhc2204gamer@outlook.com
 
    -- Validar un requerimiento inexistente
    EXEC [dbo].[sp_registrar_cliente]
-       @email = 'cliente@ejemplo.com',
+       @email = 'bryanhernandez1103@gmail.com',
        @contrasena = 'contrasena123',
        @token = 'token123',
        @nombreCliente = 'Juan',
@@ -109,7 +109,7 @@ Contacto: moyhc2204gamer@outlook.com
 
 	-- Validar un estado y municipio que no coinciden
     EXEC [dbo].[sp_registrar_cliente]
-       @email = 'cliente@ejemplo.com',
+       @email = 'bryanhernandez1103@gmail.com',
        @contrasena = 'contrasena123',
        @token = 'token123',
        @nombreCliente = 'Juan',
@@ -128,7 +128,7 @@ Contacto: moyhc2204gamer@outlook.com
 
 	-- Validar un correo existente
     EXEC [dbo].[sp_registrar_cliente]
-       @email = 'clientes@ejemplo.com',
+       @email = 'bryanhernandez1103@gmail.com',
        @contrasena = 'contrasena654',
        @token = 'token654',
        @nombreCliente = 'Guzman',
@@ -206,7 +206,7 @@ Contacto: moyhc2204gamer@outlook.com
 -- Testeo correcto 
 EXEC [dbo].[sp_actualizar_cliente]
   @usuarioID = 1,
-  @email = 'clientes@ejemplo.com',
+  @email = 'bryanhernandez1103@gmail.com',
   @token = 'token456',
   @nombreCliente = 'Alberto',
   @apellidoPaterno = 'Riquez',
@@ -226,7 +226,7 @@ EXEC [dbo].[sp_actualizar_cliente]
 -- Error de usar otro correo que registro otro usuario
 EXEC [dbo].[sp_actualizar_cliente]
   @usuarioID = 1,
-  @email = 'Fatima23@ejemplo.com',
+  @email = '21300056@uttt.edu.mx',
   @token = 'token456',
   @nombreCliente = 'Alberto',
   @apellidoPaterno = 'Riquez',
@@ -245,7 +245,7 @@ EXEC [dbo].[sp_actualizar_cliente]
 -- Error de un municipio y estado que no coinciden
 EXEC [dbo].[sp_actualizar_cliente]
   @usuarioID = 1,
-  @email = 'clientes@ejemplo.com',
+  @email = 'acnarok@gmail.com',
   @token = 'token456',
   @nombreCliente = 'Alberto',
   @apellidoPaterno = 'Riquez',
@@ -283,19 +283,19 @@ Contacto: moyhc2204gamer@outlook.com
 
 -- Testeo correcto
 EXEC [dbo].[sp_Iniciar_Sesion]
-@email = 'PabloMiAngelitoMix@ejemplo.com',
-@contrasena = 'contrasena789'
+@email = 'bryanhernandez1103@gmail.com',
+@contrasena = 'contrasena456'
 
 
 -- Testeo incorrecto sobre el correo
 EXEC [dbo].[sp_Iniciar_Sesion]
-@email = 'PabloMiAngelitoMix@ejemplo.co',
-@contrasena = 'contrasena789'
+@email = 'bryanhernandez1103@gmail.co',
+@contrasena = 'contrasena456'
 
 -- Testeo incorrecto sobre la Contraseña
 EXEC [dbo].[sp_Iniciar_Sesion]
-@email = 'PabloMiAngelitoMix@ejemplo.com',
-@contrasena = 'contrasena78'
+@email = 'bryanhernandez1103@gmail.com',
+@contrasena = 'contrasena45'
 
 
 
@@ -324,9 +324,9 @@ EXEC [dbo].[sp_consultar_municipios]
 
 /******
 Testeo del Stored procedure para dar de alta un establecimiento.
-Script Date: 06/10/2024 01:58:16 a. m. 
-Autor: Moisés Jael Hernández Calva       
-Contacto: moyhc2204gamer@outlook.com
+Script Date: 15/10/2024 01:36:06 a. m. 
+Autor: Bryan Hernández Garcia      
+Contacto: bryanhernandez1103@gmail.com
 ******/
 
 -- Testeo para un cuenta que no se dio alta como vendendedor
@@ -341,10 +341,33 @@ EXEC [dbo].[sp_DarDeAlta_Establecimiento]
      @estadoID = 1,
      @municipio = 'El llano';
 
+-- Testeo de error de datos nulos
+EXEC [dbo].[sp_DarDeAlta_Establecimiento]
+     @usuarioID = 1,
+     @nombreEstablecimiento = 'A toda facha',
+    -- @codigoPostal = '44445',
+     @colonia = 'Centro',
+     @calle = 'Segunda',
+     @noInt = 59,
+     @noExt = 654,
+     @estadoID = 1,
+     @municipio = 'El llano';
+
+-- Error de un municipio y estado que no coinciden
+EXEC [dbo].[sp_DarDeAlta_Establecimiento]
+     @usuarioID = 1,
+     @nombreEstablecimiento = 'A toda facha',
+     @codigoPostal = '44445',
+     @colonia = 'Centro',
+     @calle = 'Segunda',
+     @noInt = 59,
+     @noExt = 654,
+     @estadoID = 1,
+     @municipio = 'El lla';
 
 -- Testeo correctamente
 EXEC [dbo].[sp_DarDeAlta_Establecimiento]
-     @usuarioID = 7,
+     @usuarioID = 3,
      @nombreEstablecimiento = 'Ropa tumbada',
      @codigoPostal = '44445',
      @colonia = 'Centro',
@@ -387,13 +410,13 @@ Contacto: bryanhernandez1103@gmail.com
 
 -- Testeo correcto
 EXEC [dbo].[sp_olvideLaContrasena_Email]
-     @email = 'clientes@ejemplo.com';
+     @email = 'bryanhernandez1103@gmail.com';
 
 
 -- Error al mandar un correo inexistente
 
  EXEC [dbo].[sp_olvideLaContrasena_Email]
- @email = 'clientes@ejemplo.co';
+ @email = 'bryanhernandez1103@gmail.co';
 
  -- Error de no mandar un correo
   EXEC [dbo].[sp_olvideLaContrasena_Email];
@@ -409,17 +432,17 @@ Contacto: bryanhernandez1103@gmail.com
 
 -- Testeo correcto
 EXEC [dbo].[sp_olvideLaContrasena_Token]
-@email = 'clientes@ejemplo.com',
+@email = 'bryanhernandez1103@gmail.com',
 @token = 'token456';
 
 
 -- Error de mandar un campo nulo
 EXEC [dbo].[sp_olvideLaContrasena_Token]
-@email = 'clientes@ejemplo.com';
+@email = 'bryanhernandez1103@gmail.com';
 
 -- Error de mandar un campo inexistente
 EXEC [dbo].[sp_olvideLaContrasena_Token]
-@email = 'clientes@ejemplo.com',
+@email = 'bryanhernandez1103@gmail.com',
 @token = 'token45';
 
 
@@ -433,15 +456,68 @@ Contacto: bryanhernandez1103@gmail.com
 
 -- Testeo Correcto
 EXEC [dbo].[sp_olvideLaContrasena_Actualizacion]
-@email = 'clientes@ejemplo.com',
+@email = 'bryanhernandez1103@gmail.com',
 @contrasena = 'Contraseña9123';
 
 
 -- Error de mandar un correo inexistente
 EXEC [dbo].[sp_olvideLaContrasena_Actualizacion]
-@email = 'clientes@ejemplo.co',
+@email = 'bryanhernandez1103@gmail.co',
 @contrasena = 'Contraseña123';
 
 -- Error de mandar un campo nulo
 EXEC [dbo].[sp_olvideLaContrasena_Actualizacion]
-@email = 'clientes@ejemplo.com';
+@email = 'bryanhernandez1103@gmail.com';
+
+
+
+/******
+Testeo de Stored procedure para registrar una vestimenta.   
+Script Date: 16/10/2024 07:12:04 p. m. 
+Autor: Moisés Jael Hernández Calva       
+Contacto: moyhc2204gamer@outlook.com
+******/
+   
+-- Testeo correcto
+ EXEC [dbo].[sp_registrar_vestimenta]
+@usuarioID = 3,
+@nombre = 'Prueba',
+@precio = 200.00,
+@stock = 1,
+@tallaID = 3,
+@estiloID = 1,
+@imagen1  = 'https://storage.googleapis.com/rentoutfit-712b4.appspot.com/perfiles/Sebastian_junirh@gmail.com.gif',
+@descripcion = 'Descripcion Prueba';
+
+
+-- Error de un requerimiento nulo
+ EXEC [dbo].[sp_registrar_vestimenta]
+@usuarioID = 3,
+@nombre = 'Prueba',
+@precio = 200.00,
+@stock = 1,
+@tallaID = 3,
+@estiloID = 1,
+@imagen1  = 'https://storage.googleapis.com/rentoutfit-712b4.appspot.com/perfiles/Sebastian_junirh@gmail.com.gif';
+
+-- Error si el usuario no tiene el rol de vendedor
+EXEC [dbo].[sp_registrar_vestimenta]
+@usuarioID = 3,
+@nombre = 'Prueba',
+@precio = 200.00,
+@stock = 1,
+@tallaID = 3,
+@estiloID = 1,
+@imagen1  = 'https://storage.googleapis.com/rentoutfit-712b4.appspot.com/perfiles/Sebastian_junirh@gmail.com.gif',
+@descripcion = 'Descripcion Prueba';
+
+-- Error si el vendedor no ha registrado su establecimiento
+EXEC [dbo].[sp_registrar_vestimenta]
+@usuarioID = 3,
+@nombre = 'Prueba',
+@precio = 200.00,
+@stock = 1,
+@tallaID = 3,
+@estiloID = 1,
+@imagen1  = 'https://storage.googleapis.com/rentoutfit-712b4.appspot.com/perfiles/Sebastian_junirh@gmail.com.gif',
+@descripcion = 'Descripcion Prueba';

@@ -146,7 +146,7 @@ Para ejecutar la base de datos necesitas:
 | establecimientoID               | int             |
 | ultimaModificacionUsuario       | datetime        |
 | vestimentaEstatus               | bit             |
-
+| descripcion                     | string(500)     |
 
 ### 15. Tallas
 | Columna                         | Tipo de dato    |

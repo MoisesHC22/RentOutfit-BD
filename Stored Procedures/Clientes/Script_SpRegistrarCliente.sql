@@ -12,7 +12,6 @@ Contacto: moyhc2204gamer@outlook.com
 CREATE OR ALTER PROC [dbo].[sp_registrar_cliente]
 (
 -- Usuarios
-
 @email VARCHAR(50) = NULL,
 @contrasena VARCHAR(255) = NULL,
 @token VARCHAR(50) = NULL,
@@ -122,7 +121,7 @@ BEGIN
 	 END
 	ELSE
 	 BEGIN
-	 SET @tipoError = 3;
+	   SET @tipoError = 3;
 	   SET @mensaje = 'El estado y municipio con coinciden.'
 
 	   ROLLBACK TRANSACTION;

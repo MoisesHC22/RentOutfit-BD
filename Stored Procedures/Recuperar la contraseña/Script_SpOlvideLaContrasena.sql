@@ -75,8 +75,8 @@ Contacto: moyhc2204gamer@outlook.com
 
 CREATE OR ALTER PROC [dbo].[sp_olvideLaContrasena_Token]
 (
-@token VARCHAR(50) = NULL,
-@email VARCHAR(50) = NULL
+@email VARCHAR(50) = NULL,
+@token VARCHAR(50) = NULL
 )
 AS
 BEGIN
@@ -142,7 +142,8 @@ Contacto: moyhc2204gamer@outlook.com
 CREATE OR ALTER PROC [dbo].[sp_olvideLaContrasena_Actualizacion]
 (
 @contrasena VARCHAR(250) = NULL,
-@email VARCHAR(50) = NULL
+@email VARCHAR(50) = NULL,
+@token VARCHAR(50) = NULL
 )
 AS
  BEGIN
@@ -154,7 +155,7 @@ SET NOCOUNT ON;
   BEGIN TRY
      BEGIN TRANSACTION;
 
-	 IF @contrasena IS NULL OR @email IS NULL
+	 IF @contrasena IS NULL OR @email IS NULL OR @token IS NULL
 	   BEGIN
 	     SET @tipoError = 1;
 		 SET @mensaje = 'Uno o más campos requeridos están vacíos.';
@@ -170,9 +171,10 @@ SET NOCOUNT ON;
 	  DECLARE @contrasenaEncryptada VARBINARY(64) = HASHBYTES('SHA2_256', @contrasena);
 
 	  UPDATE Usuarios
-	    SET contrasena = @contrasenaEncryptada
-	  WHERE email = @email
-
+	    SET token = @token,
+	        contrasena = @contrasenaEncryptada
+	  WHERE email = @email 
+	
 	      COMMIT TRANSACTION;
 
 		  SET @tipoError = 0;

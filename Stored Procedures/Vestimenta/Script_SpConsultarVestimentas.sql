@@ -35,7 +35,6 @@ BEGIN
 	  SELECT
 	  V.nombrePrenda,
 	  V.precioPorDia,
-	  V.linkImagenVes,
 	  V.vestimentaEstatus,
 
 	  -- Pruebas

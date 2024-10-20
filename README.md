@@ -66,6 +66,7 @@ Para ejecutar la base de datos necesitas:
 | nombreEstablecimiento            | varchar(50)     |
 | direccionID                      | int             |
 | ultimaModificacionEstablecimiento| datetime        |
+| linkImagenEstablecimiento        | varchar(250)    |
 
 ### 7. Direcciones
 | Columna                         | Tipo de dato    |

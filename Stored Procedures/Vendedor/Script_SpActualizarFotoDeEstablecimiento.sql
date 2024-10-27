@@ -10,7 +10,8 @@ Contacto: moyhc2204gamer@outlook.com
 
 CREATE OR ALTER PROC [dbo].[sp_Actualizar_FotoDeEstablecimiento]
 (
-@usaurioID INT = NULL,
+@usuarioID INT = NULL,
+@establecimientoID INT = NULL,
 @linkImagenEstablecimiento VARCHAR(250) = NULL
 )
 AS
@@ -23,7 +24,7 @@ AS
 	BEGIN TRY
 	    BEGIN TRANSACTION;
 
-	    IF @usaurioID IS NULL OR @linkImagenEstablecimiento IS NULL
+	    IF @usuarioID IS NULL OR @linkImagenEstablecimiento IS NULL
 		 BEGIN
 		    SET @tipoError = 1;
 	        SET @mensaje = 'Uno o más campos requeridos están vacíos.';
@@ -38,12 +39,14 @@ AS
 			Establecimientos E
 			  INNER JOIN Clientes C ON E.clienteID = C.clienteID
 			  INNER JOIN Usuarios U ON C.usuarioID = U.usuarioID 
-			WHERE U.usuarioID = @usaurioID  
+			WHERE U.usuarioID = @usuarioID 
 		)
 		 BEGIN
 		  UPDATE Establecimientos
         	SET linkImagenEstablecimiento = @linkImagenEstablecimiento
-          WHERE clienteID  = (SELECT clienteID FROM Clientes WHERE usuarioID = @usaurioID)
+          WHERE clienteID  = (SELECT clienteID FROM Clientes WHERE usuarioID = @usuarioID) 
+		  AND  establecimientosID = @establecimientoID ;
+
 
 		  COMMIT TRANSACTION;
 

@@ -23,17 +23,8 @@ CREATE OR ALTER PROC [dbo].[sp_registrar_cliente]
 @apellidoMaterno VARCHAR(50) = NULL,
 @linkImagenPerfil VARCHAR(250) = NULL,
 @telefono VARCHAR(10) = NULL,
-@generoID INT = NULL,
+@generoID INT = NULL
 
--- Direccion
-
-@codigoPostal VARCHAR(5) = NULL,
-@colonia VARCHAR(50) = NULL,
-@calle VARCHAR(50) = NULL,
-@noInt INT = NULL,
-@noExt INT = NULL,
-@estadoID INT = NULL,
-@municipio VARCHAR(50) = NULL
 )
 AS
 BEGIN
@@ -47,9 +38,7 @@ BEGIN
 
 	  --Validación de campos
 	  IF @email IS NULL OR @contrasena IS NULL OR @token IS NULL OR @nombreCliente IS NULL OR 
-	     @apellidoPaterno IS NULL OR @apellidoMaterno IS NULL OR @telefono IS NULL OR @generoID IS NULL OR
-		 @codigoPostal IS NULL OR @colonia IS NULL OR @calle IS NULL OR @noInt IS NULL OR @noExt IS NULL OR
-		 @estadoID IS NULL OR @municipio IS NULL
+	     @apellidoPaterno IS NULL OR @apellidoMaterno IS NULL OR @telefono IS NULL OR @generoID IS NULL
 	  BEGIN
 	     SET @tipoError = 1;
 		 SET @mensaje = 'Uno o más campos requeridos están vacíos.';
@@ -59,16 +48,6 @@ BEGIN
          RETURN;
 	  END
 
-	  IF EXISTS(
-	   SELECT 
-		  M.municipioID,
-		  M.estadoID,
-		  E.nombreEstado
-	   FROM Estados E
-	     INNER JOIN Municipios M ON E.estadoID = M.estadoID
-	   WHERE M.nombreMunicipio = @municipio AND E.estadoID = @estadoID
-	  )
-	  BEGIN
 	    
 		  IF EXISTS(
 		   SELECT * FROM Usuarios WHERE email = @email 
@@ -100,17 +79,11 @@ BEGIN
 	          INSERT INTO Roles (detalleRolID, usuarioID, ultimaModificacionRol)
 		      VALUES (1, @usuarioID, GETDATE());
 
-	      -- Insertar el domicilio
-
-	      DECLARE @direccionID INT;
-	          INSERT INTO Direcciones (codigoPostal, colonia, calle, noInt, noExt, ultimaModificacionDireccion, estadoID, municipio)
-		      VALUES (@codigoPostal, @colonia, @calle, @noInt, @noExt, GETDATE() ,@estadoID, @municipio)
-   	      SET @direccionID = SCOPE_IDENTITY();
 
 	      -- Insertar al cliente
 
-	      INSERT INTO Clientes (nombreCliente, apellidoPaterno, apellidoMaterno, linkImagenPerfil, usuarioID, telefono, direccionID, generoID, ultimaModificacionCliente)
-	      VALUES (@nombreCliente, @apellidoPaterno, @apellidoMaterno, @linkImagenPerfil, @usuarioID, @telefono, @direccionID, @generoID, GETDATE())
+	      INSERT INTO Clientes (nombreCliente, apellidoPaterno, apellidoMaterno, linkImagenPerfil, usuarioID, telefono, generoID, ultimaModificacionCliente)
+	      VALUES (@nombreCliente, @apellidoPaterno, @apellidoMaterno, @linkImagenPerfil, @usuarioID, @telefono, @generoID, GETDATE())
 
   	      COMMIT TRANSACTION;
 
@@ -118,17 +91,6 @@ BEGIN
 	      SET @mensaje = 'Se insertó el cliente de forma correcta.';
 	      SELECT @tipoError AS tipoError, @mensaje AS mensaje;
 	    END
-	 END
-	ELSE
-	 BEGIN
-	   SET @tipoError = 3;
-	   SET @mensaje = 'El estado y municipio con coinciden.'
-
-	   ROLLBACK TRANSACTION;
-
-	   SELECT @tipoError AS tipoError, @mensaje AS mensaje;
-	   RETURN;
-	 END
 
    END TRY
    BEGIN CATCH

@@ -46,15 +46,14 @@ BEGIN
 
 		      SELECT
                 R.detalleRolID,
+				U.usuarioID,
                 C.nombreCliente,
-                C.linkImagenPerfil,
-				E.nombreEstado,
-                D.municipio
+				C.apellidoPaterno,
+				C.apellidoMaterno,
+                C.linkImagenPerfil
 			  FROM Usuarios U
 			    INNER JOIN Clientes C ON U.usuarioID = C.usuarioID
 			    INNER JOIN Roles R ON U.usuarioID = R.usuarioID
-			    INNER JOIN Direcciones D ON C.direccionID = D.direccionID
-			    INNER JOIN Estados E ON D.estadoID = E.estadoID
 			  WHERE U.email = @email AND U.contrasena = @ContrasenaEncryptada
 
 			  COMMIT TRANSACTION;

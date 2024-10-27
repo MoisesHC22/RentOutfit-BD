@@ -59,20 +59,10 @@ BEGIN
 		   C.apellidoPaterno,
 		   C.linkImagenPerfil,
 		   C.telefono,
-		   G.nombreGenero AS genero,
-		   
-		   D.codigoPostal,
-		   D.colonia,
-		   D.calle,
-		   D.noExt,
-		   D.noInt,
-		   E.nombreEstado AS estado,
-		   D.municipio
+		   G.nombreGenero AS genero
 	      FROM Usuarios U
             INNER JOIN Clientes C ON U.usuarioID = C.usuarioID
 		    INNER JOIN Roles R ON U.usuarioID = R.usuarioID
-		    INNER JOIN Direcciones D ON C.direccionID = D.direccionID
-		    INNER JOIN Estados E ON D.estadoID = E.estadoID
 	   	    INNER JOIN Generos G ON C.generoID = G.generoID
 		    INNER JOIN DetalleRol DT ON R.detalleRolID = DT.detalleRolID
 	      WHERE (C.usuarioID = @usuarioID OR @detalleRolID = 3)

@@ -47,7 +47,6 @@ Para ejecutar la base de datos necesitas:
 | linkImagenPerfil                | varchar(250)    |
 | usuarioID                       | int             |
 | telefono                        | varchar(10)     |
-| direccionID                     | int             |
 | generoID                        | int             |
 |ultimaModificacionCliente        | datetime        |
 
@@ -75,8 +74,8 @@ Para ejecutar la base de datos necesitas:
 | codigoPostal                    | varchar(5)      |
 | colonia                         | varchar(50)     |
 | calle                           | varchar(50)     |
-| noInt                           | int             |
-| noExt                           | int             |
+| noInt                           | varchar(5)      |
+| noExt                           | varchar(5)      |
 | ultimaModificacionDireccion     | datetime        |
 | estadoID                        | int             |
 | municipio                       | varchar(50)     |
@@ -92,7 +91,7 @@ Para ejecutar la base de datos necesitas:
 | Columna                         | Tipo de dato    |
 |---------------------------------|-----------------|
 | municipioID                     | int (Identity)  |
-| nombreMunicipio                 | varchar(150)     |
+| nombreMunicipio                 | varchar(150)    |
 | estadoID                        | int             |
 | ultimaModificacionMunicipio     | datetime        |
 
@@ -121,7 +120,6 @@ Para ejecutar la base de datos necesitas:
 | precioTotal                     | decimal(18,2)   |
 | cantidad                        | int             |
 | pedidoID                        | int             |
-| incidenciaID                    | int             |
 | ultimaModificacionDV            | datetime        |
 
 ### 13. Incidencias
@@ -132,6 +130,7 @@ Para ejecutar la base de datos necesitas:
 | descripcion                     | text            |
 | incidenciaEstatus               | bit             |
 | ultimaModificacionIncidencia    | datetime        |
+| datalleVentaID                  | int             |
 
 ### 14. Vestimentas
 | Columna                         | Tipo de dato    |
@@ -194,4 +193,4 @@ Frontend Móvil | [Repositorio de Móvil](https://github.com/MoisesHC22/RentOutf
 
 ## Diagrama de base de datos
 
-[![Rent-Outfit-BD.png](https://i.postimg.cc/vTN3Vh50/Rent-Outfit-BD.png)](https://postimg.cc/zHTCmnth)
+[![Base-De-Datos-Rent-Outfit.png](https://i.postimg.cc/5yR2YfRw/Base-De-Datos-Rent-Outfit.png)](https://postimg.cc/zHTr4Y5B)

@@ -13,6 +13,7 @@ CREATE OR ALTER PROC [dbo].[sp_registrar_vestimenta]
 (
 -- Vestimenta
 @usuarioID INT = NULL,
+@establecimientoID  INT = NULL,
 @nombre VARCHAR(50) = NULL,
 @precio DECIMAL(18,2) = NULL,
 @stock INT = NULL,
@@ -53,7 +54,7 @@ AS
 	     SELECT 1 FROM Establecimientos E
 		   INNER JOIN Clientes C ON E.clienteID = C.clienteID
 		   INNER JOIN Usuarios U ON C.clienteID = u.usuarioID
-		 WHERE U.usuarioID =  @usuarioID  
+		 WHERE U.usuarioID =  @usuarioID  and E.establecimientosID = @establecimientoID
 	   )
 	    BEGIN
 
@@ -61,15 +62,6 @@ AS
 		     INSERT INTO ImagenesVes (imagen1, imagen2, imagen3, imagen4, ultimaModificacionImgVes)
 		     VALUES(@imagen1, @imagen2, @imagen3, @imagen4, GETDATE());
 		   SET @imagenesVesID = SCOPE_IDENTITY();
-
-
-		   DECLARE @establecimientoID INT;
-		   SELECT 
-		     @establecimientoID = e.establecimientosID
-		   FROM Establecimientos E
-		     INNER JOIN Clientes C ON E.clienteID = C.clienteID
-		     INNER JOIN Usuarios U ON C.clienteID = u.usuarioID
-		   WHERE U.usuarioID =  @usuarioID 
 		   
 
 		   INSERT INTO Vestimentas (nombrePrenda, precioPorDia, stock, fechaDePublicacion, tallaID, establecimientoID, ultimaModificacionVestimenta, vestimentaEstatus, imagenesVesID, estiloID, descripcion)

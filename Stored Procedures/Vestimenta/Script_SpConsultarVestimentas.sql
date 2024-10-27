@@ -11,13 +11,8 @@ Contacto: moyhc2204gamer@outlook.com
 
 CREATE OR ALTER PROC [dbo].[sp_mostrar_vestimenta]
 (
-@nombrePrenda VARCHAR(50) = NULL,
-@estilo VARCHAR(50) = NULL,
-@talla VARCHAR(50) = NULL,
-@establecimiento VARCHAR(50) = NULL,
 @estado VARCHAR(50) = NULL,
 @municipio VARCHAR(150) = NULL,
-@usuarioID INT = NULL,
 @pagina INT = 1
 )
 AS
@@ -26,7 +21,7 @@ BEGIN
   
   DECLARE @tipoError INT = 0;
   DECLARE @mensaje NVARCHAR(255) = '';
-  DECLARE @registrosPorPagina INT  = 10;
+  DECLARE @registrosPorPagina INT  = 9;
   DECLARE @offset INT;
 
   BEGIN TRY
@@ -36,13 +31,10 @@ BEGIN
 	  BEGIN TRANSACTION;
 
 	  SELECT
-	     V.vestimentaID AS Vestimenta,
+	     V.vestimentaID,
 	     V.nombrePrenda,
 	     V.precioPorDia,
 		 IMV.imagen1,
-	     V.vestimentaEstatus,
-
-	     -- Pruebas
 
 	     T.nombreTalla,
 	     ES.nombreEstilo,
@@ -58,14 +50,9 @@ BEGIN
 		 INNER JOIN Direcciones D ON  E.direccionID = D.direccionID
 		 INNER JOIN Estados EST ON D.estadoID = EST.estadoID
 		 INNER JOIN Municipios M ON D.municipio	= M.nombreMunicipio
-	   WHERE (@nombrePrenda IS NULL OR V.nombrePrenda LIKE '%' + @nombrePrenda + '%')
-	     AND (@usuarioID IS NULL OR U.usuarioID = @usuarioID)
-         AND (@talla IS NULL OR T.nombreTalla = @talla)
-         AND (@estilo IS NULL OR ES.nombreEstilo = @estilo)
-         AND (@establecimiento IS NULL OR E.nombreEstablecimiento LIKE '%' + @establecimiento + '%')
-		 AND (@estado IS NULL OR EST.nombreEstado = @estado AND @municipio IS NULL OR M.nombreMunicipio = @municipio)
+	  WHERE (V.vestimentaEstatus = 1 AND EST.nombreEstado = @estado AND M.nombreMunicipio  = @municipio)
 	  ORDER BY V.nombrePrenda
-	  OFFSET @offset ROWS
+	   OFFSET @offset ROWS
 	  FETCH NEXT @registrosPorPagina ROWS ONLY;
 	  
 	  COMMIT TRANSACTION;
@@ -85,3 +72,8 @@ BEGIN
    
   END CATCH
 END
+
+
+EXEC [dbo].[sp_mostrar_vestimenta]
+@estado = 'Hidalgo',
+@municipio = 'Apan'

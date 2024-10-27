@@ -22,8 +22,8 @@ CREATE OR ALTER PROC [dbo].[sp_DarDeAlta_Establecimiento]
 @codigoPostal VARCHAR(5) = NULL,
 @colonia VARCHAR(50) = NULL,
 @calle VARCHAR(50) = NULL,
-@noInt INT= NULL,
-@noExt INT = NULL,
+@noInt VARCHAR(5) = NULL,
+@noExt VARCHAR(5) = NULL,
 @estadoID INT = NULL,
 @municipio VARCHAR(150) = NULL
 )
@@ -36,6 +36,7 @@ BEGIN
   DECLARE @direccionID INT;
   DECLARE @clienteID INT;
   DECLARE @detalleRolID INT;
+  DECLARE @establecimientoID INT;
 
   BEGIN TRY
     BEGIN TRANSACTION;
@@ -83,12 +84,14 @@ BEGIN
 
 	         INSERT INTO Establecimientos (clienteID, nombreEstablecimiento, direccionID, ultimaModificacionEstablecimiento)
 	         VALUES (@clienteID, @nombreEstablecimiento, @direccionID, GETDATE())
-
+			 SET @establecimientoID = SCOPE_IDENTITY();
+			 
   		   COMMIT TRANSACTION;
 
-	       SET @tipoError = 0;
+           SET @tipoError = 0;
            SET @mensaje = 'Se dio de alta Establecimiento con exito.';
-           SELECT @tipoError AS tipoError, @mensaje AS mensaje;
+          SELECT @tipoError AS tipoError, @mensaje AS mensaje, @establecimientoID AS establecimientoID;
+            
 
 		 END
         ElSE

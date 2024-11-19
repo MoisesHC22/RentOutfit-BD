@@ -21,7 +21,7 @@ AS
 
    DECLARE @tipoError INT = 0;
    DECLARE @mensaje NVARCHAR(255) = '';
-   DECLARE @registrosPorPagina INT  = 6;
+   DECLARE @registrosPorPagina INT  = 12;
    DECLARE @offset INT;
 
    BEGIN TRY
